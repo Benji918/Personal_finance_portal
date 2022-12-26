@@ -1,0 +1,4 @@
+/venv
+/.idea
+benji_portfolio/__pycache__/
+db.sqlite3
