@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 class MyApp(models.Model):
     name = models.CharField(max_length=50, unique=True)
     description = models.TextField(default='', blank=False)
-    img = models.ImageField(default='')
+    img = models.ImageField(upload_to='my_apps')
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='my_apps')
 

@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'website',
+    'my_finances',
 ]
 
 MIDDLEWARE = [
@@ -53,6 +54,12 @@ ROOT_URLCONF = 'benji_portfolio.urls'
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+
+STATIC_URL = "/static/"
+
+MEDIA_URL = "/media/"
+
+MEDIA_ROOT = BASE_DIR / 'media'
 
 TEMPLATES = [
     {
