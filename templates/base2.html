@@ -62,43 +62,43 @@
         </div>
 
         <!-- Nav Item - Airpollution Collapse Menu -->
-        <li class="nav-item active">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse"
-               data-target="#collapseOne"
-               aria-expanded="true" aria-controls="collapseOne">
-                <i class="fas fa-fw fa-cog"></i>
-                <span>Airpollution App</span>
-            </a>
-            <!--            <div id="collapseOne" class="collapse{% if app_name == 'airpollution' %} show{% endif %}"-->
-            <!--                 aria-labelledby="headingOne" data-parent="#accordionSidebar">-->
-            <!--                <div class="bg-white py-2 collapse-inner rounded">-->
-            <!--                    <h6 class="collapse-header">Upload data:</h6>-->
-            <!--                    {% url 'airpollution:upload' as airpollution_upload %}-->
-            <!--                    <a class="collapse-item{% if page_path == airpollution_upload %} active{% endif %}"-->
-            <!--                       href="{{ airpollution_upload }}">Upload</a>-->
-            <!--                    <h6 class="collapse-header">View data:</h6>-->
-            <!--                    {% url 'airpollution:table' as airpollution_table %}-->
-            <!--                    <a class="collapse-item{% if page_path == airpollution_table %} active{% endif %}"-->
-            <!--                       href="{{ airpollution_table }}">Table</a>-->
-            <!--                    {% url 'airpollution:charts' as airpollution_charts %}-->
-            <!--                    <a class="collapse-item{% if page_path == airpollution_charts %} active{% endif %}"-->
-            <!--                       href="{{ airpollution_charts }}">Charts</a>-->
-            <!--                </div>-->
-            <!--            </div>-->
-        </li>
+<!--        <li class="nav-item active">-->
+<!--            <a class="nav-link collapsed" href="#" data-toggle="collapse"-->
+<!--               data-target="#collapseOne"-->
+<!--               aria-expanded="true" aria-controls="collapseOne">-->
+<!--                <i class="fas fa-fw fa-cog"></i>-->
+<!--                <span>Airpollution App</span>-->
+<!--            </a>-->
+<!--            &lt;!&ndash;            <div id="collapseOne" class="collapse{% if app_name == 'airpollution' %} show{% endif %}"&ndash;&gt;-->
+<!--            &lt;!&ndash;                 aria-labelledby="headingOne" data-parent="#accordionSidebar">&ndash;&gt;-->
+<!--            &lt;!&ndash;                <div class="bg-white py-2 collapse-inner rounded">&ndash;&gt;-->
+<!--            &lt;!&ndash;                    <h6 class="collapse-header">Upload data:</h6>&ndash;&gt;-->
+<!--            &lt;!&ndash;                    {% url 'airpollution:upload' as airpollution_upload %}&ndash;&gt;-->
+<!--            &lt;!&ndash;                    <a class="collapse-item{% if page_path == airpollution_upload %} active{% endif %}"&ndash;&gt;-->
+<!--            &lt;!&ndash;                       href="{{ airpollution_upload }}">Upload</a>&ndash;&gt;-->
+<!--            &lt;!&ndash;                    <h6 class="collapse-header">View data:</h6>&ndash;&gt;-->
+<!--            &lt;!&ndash;                    {% url 'airpollution:table' as airpollution_table %}&ndash;&gt;-->
+<!--            &lt;!&ndash;                    <a class="collapse-item{% if page_path == airpollution_table %} active{% endif %}"&ndash;&gt;-->
+<!--            &lt;!&ndash;                       href="{{ airpollution_table }}">Table</a>&ndash;&gt;-->
+<!--            &lt;!&ndash;                    {% url 'airpollution:charts' as airpollution_charts %}&ndash;&gt;-->
+<!--            &lt;!&ndash;                    <a class="collapse-item{% if page_path == airpollution_charts %} active{% endif %}"&ndash;&gt;-->
+<!--            &lt;!&ndash;                       href="{{ airpollution_charts }}">Charts</a>&ndash;&gt;-->
+<!--            &lt;!&ndash;                </div>&ndash;&gt;-->
+<!--            &lt;!&ndash;            </div>&ndash;&gt;-->
+<!--        </li>-->
 
         <!-- Nav Item - My Finances Collapse Menu -->
-        <!--        {% if user %}-->
-        <!--            <li class="nav-item{% if app_name == 'my_finances' %} active{% endif %}">-->
-        <!--                <a class="nav-link{% if app_name != 'my_finances' %} collapsed{% endif %}" href="#"-->
-        <!--                   data-toggle="collapse" data-target="#collapseTwo"-->
-        <!--                   aria-expanded="true" aria-controls="collapseTwo">-->
-        <!--                    <i class="fas fa-fw fa-cog"></i>-->
-        <!--                    <span>My Finances App</span>-->
-        <!--                </a>-->
-        <!--                <div id="collapseTwo" class="collapse{% if app_name == 'my_finances' %} show{% endif %}"-->
-        <!--                     aria-labelledby="headingTwo" data-parent="#accordionSidebar">-->
-        <!--                    <div class="bg-white py-2 collapse-inner rounded">-->
+
+                    <li class="nav-item{% if app_name == 'my_finances' %} active{% endif %}">
+                        <a class="nav-link{% if app_name != 'my_finances' %} collapsed{% endif %}" href="#"
+                           data-toggle="collapse" data-target="#collapseTwo"
+                           aria-expanded="true" aria-controls="collapseTwo">
+                            <i class="fas fa-fw fa-cog"></i>
+                            <span>My Finances App</span>
+                        </a>
+                        <div id="collapseTwo" class="collapse{% if app_name == 'my_finances' %} show{% endif %}"
+                             aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                            <div class="bg-white py-2 collapse-inner rounded">
         <!--                        <h6 class="collapse-header">Dashboards:</h6>-->
         <!--                        {% url 'my_finances:current_period' as my_finances_current_period %}-->
         <!--                        {% url 'my_finances:year_overview' as my_finances_year_overview %}-->
@@ -107,31 +107,30 @@
         <!--                        <a class="collapse-item{% if page_path == my_finances_year_overview %} active{% endif %}"-->
         <!--                           href="{{ my_finances_year_overview }}">Year Overview</a>-->
 
-        <!--                        <h6 class="collapse-header">Update records:</h6>-->
-        <!--                        {% url 'my_finances:balance_create' as my_finances_balance_create %}-->
-        <!--                        {% url 'my_finances:income_create' as my_finances_income_create %}-->
-        <!--                        {% url 'my_finances:outcome_create' as my_finances_outcome_create %}-->
-        <!--                        <a class="collapse-item{% if page_path == my_finances_balance_create %} active{% endif %}"-->
-        <!--                           href="{{ my_finances_balance_create }}">Add Balance</a>-->
-        <!--                        <a class="collapse-item{% if page_path == my_finances_income_create %} active{% endif %}"-->
-        <!--                           href="{{ my_finances_income_create }}">Add Income</a>-->
-        <!--                        <a class="collapse-item{% if page_path == my_finances_outcome_create %} active{% endif %}"-->
-        <!--                           href="{{ my_finances_outcome_create }}">Add Outcome</a>-->
+                                <h6 class="collapse-header">Update records:</h6>
+                                {% url 'my_finances:balance_create' as my_finances_balance_create %}
+                                {% url 'my_finances:income_create' as my_finances_income_create %}
+                                {% url 'my_finances:outcome_create' as my_finances_outcome_create %}
+                                <a class="collapse-item{% if page_path == my_finances_balance_create %} active{% endif %}"
+                                   href="{{ my_finances_balance_create }}">Add Balance</a>
+                                <a class="collapse-item{% if page_path == my_finances_income_create %} active{% endif %}"
+                                   href="{{ my_finances_income_create }}">Add Income</a>
+                                <a class="collapse-item{% if page_path == my_finances_outcome_create %} active{% endif %}"
+                                   href="{{ my_finances_outcome_create }}">Add Outcome</a>
 
-        <!--                        <h6 class="collapse-header">View records:</h6>-->
-        <!--                        {% url 'my_finances:balance_list' as my_finances_balance_list %}-->
-        <!--                        {% url 'my_finances:income_list' as my_finances_income_list %}-->
-        <!--                        {% url 'my_finances:outcome_list' as my_finances_outcome_list %}-->
-        <!--                        <a class="collapse-item{% if page_path == my_finances_balance_list %} active{% endif %}"-->
-        <!--                           href="{{ my_finances_balance_list }}">List Balance</a>-->
-        <!--                        <a class="collapse-item{% if page_path == my_finances_income_list %} active{% endif %}"-->
-        <!--                           href="{{ my_finances_income_list }}">List Income</a>-->
-        <!--                        <a class="collapse-item{% if page_path == my_finances_outcome_list %} active{% endif %}"-->
-        <!--                           href="{{ my_finances_outcome_list }}">List Outcome</a>-->
-        <!--                    </div>-->
-        <!--                </div>-->
-        <!--            </li>-->
-        <!--        {% endif %}-->
+                                <h6 class="collapse-header">View records:</h6>
+                                {% url 'my_finances:balance_list' as my_finances_balance_list %}
+                                {% url 'my_finances:income_list' as my_finances_income_list %}
+                                {% url 'my_finances:outcome_list' as my_finances_outcome_list %}
+                                <a class="collapse-item{% if page_path == my_finances_balance_list %} active{% endif %}"
+                                   href="{{ my_finances_balance_list }}">List Balance</a>
+                                <a class="collapse-item{% if page_path == my_finances_income_list %} active{% endif %}"
+                                   href="{{ my_finances_income_list }}">List Income</a>
+                                <a class="collapse-item{% if page_path == my_finances_outcome_list %} active{% endif %}"
+                                   href="{{ my_finances_outcome_list }}">List Outcome</a>
+                            </div>
+                        </div>
+                    </li>
 
 
         <!-- Divider -->
