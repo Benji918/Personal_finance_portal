@@ -1,0 +1,34 @@
+{% extends 'base2.html' %}
+{% block content %}
+<div class="row">
+
+    <div class="col-lg-8 mx-auto">
+        <h1>{{list_what}}</h1>
+        <ul>
+            {% for object in object_list %}
+            <li>
+                {% if list_what == 'Income' %}
+                    <a href="{% url 'my_finances:income_detail' object.id %}">
+                         {{object.date|date}} - {{object.get_type_display}} - ${{object.value}} - {{object.repetitive}}
+                        {% if object.repetitive %}
+                        every {{object.repetition_time}} {{object.get_repetition_interval_display}}
+                        {% endif %}
+                    </a>
+                {% else %}
+                    <a href="{% url 'my_finances:outcome_detail' object.id %}">
+                        {{object.date|date}} - {{object.get_type_display}} - ${{object.value}} - {{object.repetitive}}
+                        {% if object.repetitive %}
+                        every {{object.repetition_time}} {{object.get_repetition_interval_display}}
+                        {% endif %}
+                    </a>
+                {% endif %}
+
+            </li>
+            {% empty %}
+            <li>Nothing to show yet!</li>
+            {% endfor %}
+        </ul>
+
+    </div>
+</div>
+{% endblock %}

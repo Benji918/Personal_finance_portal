@@ -4,6 +4,8 @@
 {% block content %}
 <div class="row">
     <div class="col-lg-8 mx-auto">
+        <h1>{{ header }}</h1>
+
         <form method="post">{% csrf_token %}
             {{ form|crispy }}
             <input type="submit" value="Save">

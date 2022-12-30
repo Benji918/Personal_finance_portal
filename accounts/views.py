@@ -12,6 +12,7 @@ def register(request):
         if form.is_valid():
             form.save()
             messages.success(request, message=f'{form.cleaned_data["email"]} successfully registered')
+            return redirect('accounts:login')
     context = {'form': form}
     return render(request, 'accounts/register.html', context)
 

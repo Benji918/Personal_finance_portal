@@ -1,0 +1,27 @@
+{% extends 'base2.html' %}
+{% block content %}
+<div class="row">
+
+    <div class="col-lg-8 mx-auto">
+        <h1>{{detail_what}} {{object.id}}</h1>
+        <ul>
+            <li>Date: {{object.date|date}}</li>
+            <li> Type: {{object.get_type_display}}</li>
+            <li> Value: ${{object.value}}</li>
+            <li> Repetitive: {{object.repetitive}}</li>
+            {% if object.repetitive %}
+            <li> Every {{object.repetition_time}} {{income.get_repetition_interval_display}}</li>
+            {% endif %}
+        </ul>
+        {% if detail_what == 'Income' %}
+        <a href="{% url 'my_finances:income_update' object.id %}">Update</a>
+        <a href="{% url 'my_finances:income_delete' object.id %}">Delete</a>
+        {% else %}
+        <a href="{% url 'my_finances:outcome_update' object.id %}">Update</a>
+        <a href="{% url 'my_finances:outcome_delete' object.id %}">Delete</a>
+        {% endif %}
+
+
+    </div>
+</div>
+{% endblock %}
