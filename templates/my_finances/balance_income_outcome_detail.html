@@ -8,17 +8,22 @@
             <li>Date: {{object.date|date}}</li>
             <li> Type: {{object.get_type_display}}</li>
             <li> Value: ${{object.value}}</li>
+        {% if detail_what != 'Balance' %}
             <li> Repetitive: {{object.repetitive}}</li>
             {% if object.repetitive %}
             <li> Every {{object.repetition_time}} {{income.get_repetition_interval_display}}</li>
             {% endif %}
+        {% endif %}
         </ul>
         {% if detail_what == 'Income' %}
         <a href="{% url 'my_finances:income_update' object.id %}">Update</a>
         <a href="{% url 'my_finances:income_delete' object.id %}">Delete</a>
-        {% else %}
+        {% elif detail_what == 'Outcome' %}
         <a href="{% url 'my_finances:outcome_update' object.id %}">Update</a>
         <a href="{% url 'my_finances:outcome_delete' object.id %}">Delete</a>
+        {% else %}
+        <a href="{% url 'my_finances:balance_update' object.id %}">Update</a>
+        <a href="{% url 'my_finances:balance_delete' object.id %}">Delete</a>
         {% endif %}
 
 

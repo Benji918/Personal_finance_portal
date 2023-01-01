@@ -16,4 +16,16 @@ urlpatterns = [
     path('outcome_create/', views.OutcomeCreateView.as_view(), name='outcome_create'),
     path('outcome_update/<pk>', views.OutcomeUpdateView.as_view(), name='outcome_update'),
     path('outcome_delete/<pk>', views.OutcomeDeleteView.as_view(), name='outcome_delete'),
+
+    # balance_urls
+    path('balance_list/', views.BalanceListView.as_view(), name='balance_list'),
+    path('balance_detail/<pk>', views.BalanceDetailView.as_view(), name='balance_detail'),
+    path('balance_create/', views.BalanceCreatView.as_view(), name='balance_create'),
+    path('balance_update/<pk>', views.BalanceUpdateView.as_view(), name='balance_update'),
+    path('balance_delete/<pk>', views.BalanceDeleteView.as_view(), name='balance_delete'),
+
+    # dashboard_urls
+    path('current_period/', views.current_period, name='current_period'),
+    path('year_overview/', views.year_overview, name='year_overview'),
+
 ]
