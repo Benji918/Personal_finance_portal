@@ -1,5 +1,6 @@
 {% extends 'base2.html' %}
 {% load static %}
+{% load humanize %}
 
 {% block content %}
     <!-- Page Heading -->
@@ -7,7 +8,7 @@
         <h1 class="h3 mb-0 text-gray-800">Current Year</h1>
     </div>
 
- {% if balance %}
+ {% if last_balance %}
     <div class="row" id="summary_tiles">
 
         <div class="col-xl-3 col-md-6 mb-4">
@@ -18,8 +19,8 @@
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                 Last Balance Check
                             </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="last_balance_value"></div>
-                            <div class="text-black-50 small" id="last_balance_date"></div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="last_balance_value">${{last_balance.value | intcomma}}</div>
+                            <div class="text-black-50 small" id="last_balance_date"><i><b>{{last_balance.date}}</b></i></div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -37,7 +38,7 @@
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                 Estimated Balance Now
                             </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="estimated_balance"></div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="estimated_balance">${{estimated_balance | floatformat:2 | intcomma}}</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -52,11 +53,11 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Estimated Income
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1" >Estimated Income
                             </div>
                             <div class="row no-gutters align-items-center">
                                 <div class="col-auto">
-                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800" id="total_income"></div>
+                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800" id="total_income">${{total_income | floatformat:2 | intcomma}}</div>
                                 </div>
                             </div>
                         </div>
@@ -76,7 +77,7 @@
                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                 Estimated Outcome
                             </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="total_outcome"></div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="total_outcome">${{total_outcome | floatformat:2 | intcomma}}</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-comments fa-2x text-gray-300"></i>

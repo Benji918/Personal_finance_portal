@@ -226,7 +226,7 @@ def current_period(request):
                                   'Please add at least one current balance record.')
         return render(request, 'my_finances/current_period.html')
 
-        # initialise totals with sums of non repetitive incomes and outcomes
+    # initialise totals with sums of non-repetitive incomes and outcomes
     total_income = models.Income.objects \
         .filter(user=request.user, date__gt=last_balance.date, date__lte=today, repetitive=False) \
         .aggregate(total=Sum('value'))['total']
@@ -238,11 +238,14 @@ def current_period(request):
 
     # updated totals with repetitive
     for income in models.Income.objects.filter(user=request.user, repetitive=True):
-        total_income += calculate_repetitive_total(income, last_balance.date, today)
+        total_income += calculate_repetitive_total(obj=income, last_balance_date=last_balance.date, today=today)
     for outcome in models.Outcome.objects.filter(user=request.user, repetitive=True):
         total_outcome += calculate_repetitive_total(outcome, last_balance.date, today)
     context = {
-        'balance': last_balance
+        'last_balance': last_balance,
+        'estimated_balance': last_balance.value + total_income - total_outcome,
+        'total_income': total_income,
+        'total_outcome': total_outcome
     }
     return render(request, 'my_finances/current_period.html', context=context)
 
