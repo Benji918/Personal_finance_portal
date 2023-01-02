@@ -8,7 +8,7 @@
         <h1 class="h3 mb-0 text-gray-800">Current Year</h1>
     </div>
 
- {% if last_balance %}
+ {% if make_calls %}
     <div class="row" id="summary_tiles">
 
         <div class="col-xl-3 col-md-6 mb-4">
@@ -19,8 +19,8 @@
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                 Last Balance Check
                             </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="last_balance_value">${{last_balance.value | intcomma}}</div>
-                            <div class="text-black-50 small" id="last_balance_date"><i><b>{{last_balance.date}}</b></i></div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="last_balance_value"></div>
+                            <div class="text-black-50 small" id="last_balance_date"><i><b></b></i></div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -38,7 +38,7 @@
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                 Estimated Balance Now
                             </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="estimated_balance">${{estimated_balance | floatformat:2 | intcomma}}</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="estimated_balance"></div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -57,7 +57,7 @@
                             </div>
                             <div class="row no-gutters align-items-center">
                                 <div class="col-auto">
-                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800" id="total_income">${{total_income | floatformat:2 | intcomma}}</div>
+                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800" id="total_income"></div>
                                 </div>
                             </div>
                         </div>
@@ -77,7 +77,7 @@
                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                 Estimated Outcome
                             </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="total_outcome">${{total_outcome | floatformat:2 | intcomma}}</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="total_outcome"></div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-comments fa-2x text-gray-300"></i>
@@ -154,12 +154,11 @@
 
 {% block js %}
     <!-- Page level plugins -->
-    {#    <script src="{% static 'vendor/chart.js/Chart.min.js' %}"></script>#}
     {% if make_calls %}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"
             integrity="sha512-Wt1bJGtlnMtGP0dqNFH1xlkLBNpEodaiQ8ZN5JLA5wpc1sUlk/O5uuOMNgvzddzkpvZ9GLyYNa8w2s7rqiTk5Q=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="{% static 'js/apps/my_finances/common_charts.js' %}"></script>
-    <script src="{% static 'js/apps/my_finances/current_period_charts.js' %}"></script>
+    <script src="{% static 'js/my_finances/common_chart.js' %}"></script>
+    <script src="{% static 'js/my_finances/current_period_chart.js' %}"></script>
     {% endif %}
 {% endblock %}

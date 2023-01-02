@@ -25,7 +25,7 @@ class IncomeOutcomeForm(forms.ModelForm):
             self.add_error('date', 'When repetition interval is set to MONTHS, date dat can not exceed 28.')
             is_valid = False
 
-        if repetitive:
+        if repetitive: # when it's True
             if repetition_interval == 1:  # if it's N/A
                 self.add_error('repetition_interval', 'Repetition interval can not be N/A when Repetition is selected.')
                 is_valid = False
