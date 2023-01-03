@@ -1,6 +1,8 @@
 
 $(document).ready(function () {
 
+
+
     $.get("/my_finances/get_year_chart?balance_type=current", function (res) {
         line_chart(res, 'year_chart_canvas')
     });

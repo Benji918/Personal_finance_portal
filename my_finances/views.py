@@ -21,7 +21,7 @@ class IncomeListView(ListView):
 
     def get_queryset(self):
         user = self.request.user
-        return Income.objects.filter(user=user)
+        return Income.objects.filter(user=user).order_by('id')
 
 
 class IncomeDetailView(DetailView):
@@ -66,7 +66,7 @@ class IncomeUpdateView(UpdateView):
 
     def get_success_url(self):
         messages.success(self.request, 'Income updated successfully!')
-        return reverse('my_finances:income_detail', kwargs={'pk': self.object.pk})
+        return reverse('my_finances:income_list')
 
 
 class IncomeDeleteView(DeleteView):
@@ -96,7 +96,7 @@ class OutcomeListView(ListView):
 
     def get_queryset(self):
         user = self.request.user
-        return Outcome.objects.filter(user=user)
+        return Outcome.objects.filter(user=user).order_by('id')
 
 
 class OutcomeDetailView(DetailView):
@@ -138,7 +138,7 @@ class OutcomeUpdateView(UpdateView):
 
     def get_success_url(self):
         messages.success(self.request, 'Outcome updated successfully!')
-        return reverse('my_finances:outcome_detail', kwargs={'pk': self.object.pk})
+        return reverse('my_finances:outcome_list')
 
 
 class OutcomeDeleteView(DeleteView):
@@ -163,7 +163,7 @@ class BalanceListView(ListView):
 
     def get_queryset(self):
         user = self.request.user
-        return Balance.objects.filter(user=user)
+        return Balance.objects.filter(user=user).order_by('id')
 
 
 class BalanceDetailView(DetailView):
@@ -205,7 +205,7 @@ class BalanceUpdateView(UpdateView):
 
     def get_success_url(self):
         messages.success(self.request, 'Balance updated successfully!')
-        return reverse('my_finances:balance_detail', kwargs={'pk': self.object.pk})
+        return reverse_lazy('my_finances:balance_list')
 
 
 class BalanceDeleteView(DeleteView):
@@ -249,7 +249,7 @@ def get_summary_tiles(request):
     if not last_balance:
         return JsonResponse({'error': 'No current balance has been recorded. '
                                       'Please add at least one current balance record.'})
-    # initialise totals with sums of non repetitive incomes and outcomes
+    # initialise totals with sums of non-repetitive incomes and outcomes
     total_income = Income.objects \
         .filter(user=request.user, date__gt=last_balance.date, date__lte=today, repetitive=False) \
         .aggregate(total=Sum('value'))['total']
@@ -264,7 +264,7 @@ def get_summary_tiles(request):
         total_income += calculate_repetitive_total(income, last_balance.date, today)
     for outcome in Outcome.objects.filter(user=request.user, repetitive=True):
         total_outcome += calculate_repetitive_total(outcome, last_balance.date, today)
-
+    print(total_outcome, total_outcome)
     return JsonResponse({
         'last_balance_value': last_balance.value,
         'last_balance_date': last_balance.date,

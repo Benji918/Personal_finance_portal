@@ -1,41 +1,102 @@
 {% extends 'base2.html' %}
+{% load static %}
+
 {% block content %}
-<div class="row">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
 
-    <div class="col-lg-8 mx-auto">
-        <h1>{{list_what}}</h1>
-        <ul>
-            {% for object in object_list %}
-            <li>
-                {% if list_what == 'Income' %}
-                    <a href="{% url 'my_finances:income_detail' object.id %}">
-                         {{object.id}} - {{object.date|date}} - {{object.get_type_display}} - ${{object.value}} - {{object.repetitive}}
-                        {% if object.repetitive %}
-                        every {{object.repetition_time}} {{object.get_repetition_interval_display}}
-                        {% endif %}
-                    </a>
-                {% elif list_what == 'Outcome' %}
-                    <a href="{% url 'my_finances:outcome_detail' object.id %}">
-                        {{object.id}} - {{object.date|date}} - {{object.get_type_display}} - ${{object.value}} - {{object.repetitive}}
-                        {% if object.repetitive %}
-                        every {{object.repetition_time}} {{object.get_repetition_interval_display}}
-                        {% endif %}
-                    </a>
-                {% else %}
-                    <a href="{% url 'my_finances:balance_detail' object.id %}">
-                        {{object.id}} - {{object.date|date}} - {{object.get_type_display}} - ${{object.value}}
-                        {% if object.repetitive %}
-                        every {{object.repetition_time}} {{object.get_repetition_interval_display}}
-                        {% endif %}
-                    </a>
-                {% endif %}
+            <h1>{{ list_what }} list</h1>
 
-            </li>
-            {% empty %}
-            <li>Nothing to show yet!</li>
-            {% endfor %}
-        </ul>
-
+        </div>
     </div>
-</div>
+
+    <!-- Table-->
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+
+            {% if object_list %}
+                <table id="list-table" class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Date</th>
+                        {% if list_what != 'Balance' %}
+                            <th scope="col">End</th>
+                        {% endif %}
+                        <th scope="col">Type</th>
+                        <th scope="col">Value</th>
+                        {% if list_what != 'Balance' %}
+                            <th scope="col">Repetition</th>
+                        {% endif %}
+                        <th scope="col">Comment</th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody id="table-body">
+                    {% for object in object_list %}
+                        <tr>
+                            <td>{{ object.date|date:"Y/m/d" }}</td>
+                            {% if list_what != 'Balance' %}
+                                <td>{{ object.repetition_end|date:"Y/m/d" }}</td>
+                            {% endif %}
+                            <td>{{ object.get_type_display }}</td>
+                            <td>{{ object.value }}</td>
+                            {% if list_what != 'Balance' %}
+                                <td>
+                                    {% if object.repetitive %}
+                                        every {{ object.repetition_time }} {{ object.get_repetition_interval_display }}
+                                    {% endif %}
+                                </td>
+                            {% endif %}
+                            <td>{{ object.comment }}</td>
+                            <td>
+                                {% if list_what == 'Income' %}
+                                    <a href="{% url 'my_finances:income_detail' object.pk %}">
+                                {% elif list_what == 'Outcome' %}
+                                    <a href="{% url 'my_finances:outcome_detail' object.pk %}">
+                                {% else %}
+                                    <a href="{% url 'my_finances:balance_detail' object.pk %}">
+                                {% endif %}
+                                <i class="fas fa-search-plus"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                Nothing to show
+            {% endif %}
+
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block js %}
+    <!-- Page level plugins -->
+    <script src="{% static 'vendor/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#list-table').DataTable(
+                {
+                    order: [[0, "desc"]],
+                    columns: [
+                        {name: "Date", orderable: true},
+                        {% if list_what != 'Balance' %}
+                            {name: "End", orderable: true},
+                        {% endif %}
+                        {name: "Type", orderable: true},
+                        {name: "Value", orderable: true},
+                        {% if list_what != 'Balance' %}
+                            {name: "Repetition", orderable: true},
+                        {% endif %}
+                        {name: "Comment", orderable: true},
+                        {name: "Details", orderable: false},
+                    ]
+                }
+            );
+        })
+    </script>
 {% endblock %}
