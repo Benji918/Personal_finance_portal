@@ -21,7 +21,7 @@ class IncomeListView(ListView):
 
     def get_queryset(self):
         user = self.request.user
-        return Income.objects.filter(user=user).order_by('id')
+        return Income.objects.filter(user=user).order_by('-id')
 
 
 class IncomeDetailView(DetailView):
@@ -96,7 +96,7 @@ class OutcomeListView(ListView):
 
     def get_queryset(self):
         user = self.request.user
-        return Outcome.objects.filter(user=user).order_by('id')
+        return Outcome.objects.filter(user=user).order_by('-id')
 
 
 class OutcomeDetailView(DetailView):
@@ -163,7 +163,7 @@ class BalanceListView(ListView):
 
     def get_queryset(self):
         user = self.request.user
-        return Balance.objects.filter(user=user).order_by('id')
+        return Balance.objects.filter(user=user).order_by('-id')
 
 
 class BalanceDetailView(DetailView):
@@ -254,6 +254,7 @@ def get_summary_tiles(request):
         .filter(user=request.user, date__gt=last_balance.date, date__lte=today, repetitive=False) \
         .aggregate(total=Sum('value'))['total']
     total_income = 0 if total_income is None else total_income
+    print(total_income)
     total_outcome = Outcome.objects \
         .filter(user=request.user, date__gt=last_balance.date, date__lte=today, repetitive=False) \
         .aggregate(total=Sum('value'))['total']
@@ -264,7 +265,6 @@ def get_summary_tiles(request):
         total_income += calculate_repetitive_total(income, last_balance.date, today)
     for outcome in Outcome.objects.filter(user=request.user, repetitive=True):
         total_outcome += calculate_repetitive_total(outcome, last_balance.date, today)
-    print(total_outcome, total_outcome)
     return JsonResponse({
         'last_balance_value': last_balance.value,
         'last_balance_date': last_balance.date,

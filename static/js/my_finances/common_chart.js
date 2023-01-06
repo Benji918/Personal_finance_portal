@@ -81,7 +81,7 @@
                         // Include a dollar sign in the ticks
                         callback: function (value, index, values) {
                             return new Intl.NumberFormat('en-IE', {
-                                style: 'currency', currency: 'EUR',
+                                style: 'currency', currency: 'NGN',
                                 maximumSignificantDigits: 1
                             }).format(value);
                         }

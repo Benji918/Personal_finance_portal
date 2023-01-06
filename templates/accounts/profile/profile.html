@@ -1,0 +1,30 @@
+{% extends 'accounts/profile/base.html' %}
+
+{% block content %}
+
+
+<div class="center">
+	<form method="POST" enctype="multipart/form-data" class="card">
+		{% csrf_token %}
+
+	    {% if user.profile %}
+			<img src="{{user.profile.avatar.url}}" alt="{{ user.username }}" class="avatar"  accept=".jpg,.jpeg,.png"/>
+	    {% endif %}
+
+	    <h2 class="text-center">{{ user.username | title }}</h2>
+	    <p class="text-center"><a href="mailto:{{user.email}}">{{user.email}}</a></p>
+		<hr>
+
+		<label for="email">Email Address:</label>
+		<input type="email" id="email" name="email" value="{{user.email}}" />
+
+
+		<label for="avatar">Avatar:</label>
+		<input type="file" name="avatar" id="avatar">
+
+	    <button type="submit" class="btn btn-primary full-width">Update Profile</button>
+
+	</form>
+</div>
+
+{% endblock content %}
