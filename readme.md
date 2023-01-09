@@ -1,6 +1,14 @@
-# Django Project
+#  Personal Finance
 
-This is a Django project that allows users to do XYZ.
+This is a personal finance application built using the Django web framework. It allows users to track their expenses, create budgets, and see their spending habits over time.
+
+## Proposed Features
+
+- Add and categorize expenses
+- Create and track budgets
+- View spending trends and statistics
+- Set financial goals and track progress towards them
+- Secure login and data encryption
 
 ## Prerequisites
 
