@@ -10,6 +10,9 @@ This is a personal finance application built using the Django web framework. It 
 - Set financial goals and track progress towards them
 - Secure login and data encryption
 
+## Project ER Diagram
+
+
 ## Prerequisites
 
 Before you can run this project, you need to have the following software installed on your machine:
