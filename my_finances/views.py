@@ -253,8 +253,8 @@ def get_summary_tiles(request):
     total_income = Income.objects \
         .filter(user=request.user, date__gt=last_balance.date, date__lte=today, repetitive=False) \
         .aggregate(total=Sum('value'))['total']
-    total_income = 0 if total_income is None else total_income
     print(total_income)
+    total_income = 0 if total_income is None else total_income
     total_outcome = Outcome.objects \
         .filter(user=request.user, date__gt=last_balance.date, date__lte=today, repetitive=False) \
         .aggregate(total=Sum('value'))['total']
@@ -263,8 +263,10 @@ def get_summary_tiles(request):
     # updated totals with repetitive
     for income in Income.objects.filter(user=request.user, repetitive=True):
         total_income += calculate_repetitive_total(income, last_balance.date, today)
+        print(total_income)
     for outcome in Outcome.objects.filter(user=request.user, repetitive=True):
         total_outcome += calculate_repetitive_total(outcome, last_balance.date, today)
+        print(total_outcome)
     return JsonResponse({
         'last_balance_value': last_balance.value,
         'last_balance_date': last_balance.date,

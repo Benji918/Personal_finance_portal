@@ -15,12 +15,20 @@
 	    <p class="text-center"><a href="mailto:{{user.email}}">{{user.email}}</a></p>
 		<hr>
 
+		<label for="email">Username:</label>
+		<input type="text" id="username" name="username" value="{{user.username}}" />
+
 		<label for="email">Email Address:</label>
 		<input type="email" id="email" name="email" value="{{user.email}}" />
 
 
 		<label for="avatar">Avatar:</label>
-		<input type="file" name="avatar" id="avatar">
+		<input type="file" name="avatar" id="avatar" value=" {{ user.avatar }}">
+
+		<label for="bio">Bio:</label>
+		<textarea id="bio" name="bio" rows="5" value="{{user.bio}}">
+			{{user.bio}}
+		</textarea>
 
 	    <button type="submit" class="btn btn-primary full-width">Update Profile</button>
 

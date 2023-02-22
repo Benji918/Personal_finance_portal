@@ -10,7 +10,9 @@ class Profile(models.Model):
         default='avatar.jpg',  # default avatar
         upload_to='profile_avatars'  # dir to store the image
     )
-    bio = models.TextField()
+    bio = models.CharField(max_length=1000)
+    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f'{self.user.username} Profile'

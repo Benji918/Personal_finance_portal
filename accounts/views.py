@@ -52,9 +52,10 @@ def logout_view(request):
     messages.success(request, 'Logged out successfully!')
     return redirect('accounts:login')
 
-@login_required()
-def profile(request):
-    return render(request, 'accounts/profile/profile.html')
+# @login_required()
+# def profile(request):
+#     return render(request, 'accounts/profile/profile.html')
+
 
 class MyProfile(LoginRequiredMixin, View):
     def get(self, request):
@@ -82,18 +83,21 @@ class MyProfile(LoginRequiredMixin, View):
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
+
             messages.success(request, 'Your profile has been updated successfully')
-            return redirect('profile')
+
+            return render(request, 'accounts/profile/profile.html')
         else:
             context = {
                 'user_form': user_form,
                 'profile_form': profile_form
             }
             messages.error(request, 'Error updating you profile')
-            return render(request, 'accounts/profile.html', context)
+
+            return render(request, 'accounts/profile/profile.html', context)
 
 
-class ChangePasswordView(SuccessMessageMixin, PasswordChangeView):
-    template_name = 'accounts/change_password.html'
-    success_message = "Successfully Changed Your Password"
-    success_url = reverse_lazy('website:index')
+# class ChangePasswordView(SuccessMessageMixin, PasswordChangeView):
+#     template_name = 'accounts/change_password.html'
+#     success_message = "Successfully Changed Your Password"
+#     success_url = reverse_lazy('website:index')

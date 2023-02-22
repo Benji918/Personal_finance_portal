@@ -1,12 +1,11 @@
 {%load static %}
-
 <html lang="en">
 
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="{% static 'profile/css/style.css' %}" />
-        <title>{{user.username}}-Profile</title>
+        <title>Todo List</title>
     </head>
 
     <body>
@@ -16,11 +15,11 @@
             	<nav class="nav">
 	            	<a href="{%url 'website:index'%}"><i class="bi bi-house-fill"></i> Home</a>
 	                {% if request.user.is_authenticated %}
-		                	<a href="{% url 'accounts:profile' %}" title="Update my profile">Hi {{request.user | title}}</a>
+		                	<a href="#">Hi {{request.user | title}}</a>
 	    	                <a href="{% url 'accounts:logout' %}" class="btn btn-outline">Logout</a>
 	                {% else %}
-							<a href="{% url 'accounts:login' %}" class="btn btn-outline">Login</a>
-	            	        <a href="{% url 'accounts:register' %}" class="btn btn-primary">Join Now</a>
+							<a href="{% url 'account:login' %}" class="btn btn-outline">Login</a>
+	            	        <a href="{% url 'account:register' %}" class="btn btn-primary">Join Now</a>
 	                {% endif %}
 	             </nav>
             </div>
@@ -34,7 +33,7 @@
 					     </div>
 					   {% endfor %}
 				{% endif %}
-
+            
              {%block content %}
              {%endblock content%}
             </div>
