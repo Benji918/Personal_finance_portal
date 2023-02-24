@@ -1,11 +1,13 @@
+from babel._compat import force_text
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
+from django.http import Http404
 from django.template.loader import render_to_string
+from django.utils import timezone
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from .forms import Set_Password_Form
 from .forms import Password_Reset_Form
 from django.db.models.query_utils import Q
@@ -16,9 +18,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.utils.safestring import mark_safe
 from django.views import View
 from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.core.mail import send_mail
-
+from .tokens import account_activation_token
 
 # Create your views here.
 def register(request):
@@ -26,11 +29,52 @@ def register(request):
     if request.method == 'POST':
         form = CustomUSerCreationForm(request.POST)
         if form.is_valid():
-            form.save()
-            messages.success(request, message=f'{form.cleaned_data["email"]} successfully registered')
+            # save form in the memory not in database
+            user = form.save(commit=False)
+            user.is_active = False
+            user.save()
+            # Send activation email
+            send_activation_email(request, user)
             return redirect('accounts:login')
     context = {'form': form}
     return render(request, 'accounts/register.html', context)
+
+def activate(request, uidb64, token):
+    User = get_user_model()
+    try:
+        uid = force_text(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+
+    if user and account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.save()
+        messages.success(request, 'Thank you for your email confirmation. Now you can login your account.')
+        return redirect('accounts:login')
+    else:
+        messages.error(request, 'Activation link is invalid!')
+
+    return redirect('website:index')
+
+def send_activation_email(request, user):
+    current_site = get_current_site(request)
+    subject = 'Activate Your Account'
+    message = render_to_string('accounts/account_activation_email.html', {
+        'user': user,
+        'domain': current_site.domain,
+        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+        'token': account_activation_token.make_token(user),
+        'protocol': 'https' if request.is_secure() else 'http'
+    })
+    email = EmailMessage(
+        subject, message, to=[user.email]
+    )
+    if email.send():
+        messages.success(request, f'Dear <b>{user}</b>, please go to you email <b>{user.email}</b> inbox and click on \
+                received activation link to confirm and complete the registration. <b>Note:</b> Check your spam folder.')
+    else:
+        messages.error(request, f'Problem sending confirmation email to {user.email}, check if you typed it correctly.')
 
 
 def login_view(request):
@@ -116,9 +160,6 @@ def password_change(request):
 
     form = Set_Password_Form(user)
     return render(request, 'accounts/password-reset/password_reset_confirm.html', {'form': form})
-
-
-account_activation_token = PasswordResetTokenGenerator()
 
 
 def password_reset_request(request):

@@ -1,0 +1,12 @@
+{% autoescape off %}
+
+Dear {{ user.username }},
+Thank you for registering with our website. Please click the link below to activate your account:
+<a href="{{ protocol }}://{{ domain }}{% url 'accounts:activate' uidb64=uid token=token %}">Activate Your Account</a>
+This link will expire in 24 hours.
+If you did not register with our website, please disregard this email.
+
+Thank you,
+The Website Team
+
+{% endautoescape %}
