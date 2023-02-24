@@ -23,6 +23,7 @@ from django.conf import settings
 from django.core.mail import send_mail
 from .tokens import account_activation_token
 
+
 # Create your views here.
 def register(request):
     form = CustomUSerCreationForm()
@@ -38,6 +39,7 @@ def register(request):
             return redirect('accounts:login')
     context = {'form': form}
     return render(request, 'accounts/register.html', context)
+
 
 def activate(request, uidb64, token):
     User = get_user_model()
@@ -56,6 +58,7 @@ def activate(request, uidb64, token):
         messages.error(request, 'Activation link is invalid!')
 
     return redirect('website:index')
+
 
 def send_activation_email(request, user):
     current_site = get_current_site(request)
@@ -88,9 +91,9 @@ def login_view(request):
         password = request.POST.get('password')
         remember_me = request.POST.get('remember_me')
         user = authenticate(request, username=username, password=password)
-        if user:
+        if user and user.is_active is True:
             login(request, user=user)
-            messages.success(request, message=f'{user.email} sucessfully logged in!')
+            messages.success(request, message=f'{user.email} successfully logged in!')
             if not remember_me:
                 request.session.set_expiry(0)
             return redirect('website:index')
