@@ -26,9 +26,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-from dotenv import load_dotenv
-
-load_dotenv()
+# from dotenv import load_dotenv
+#
+# load_dotenv()
 # Application definition
 
 INSTALLED_APPS = [
@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'accounts',
     'crispy_forms',
     'crispy_bootstrap5',
+
 
 ]
 
@@ -147,3 +148,8 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+
+# RECAPCHA
+RECAPTCHA_PUBLIC_KEY = '6LcZU6okAAAAAAzvyLshHvOPyNNn_S2Qek8s9rd4'
+RECAPTCHA_PRIVATE_KEY = '6LcZU6okAAAAABFN-WhS-fp8w08Wbb1ycEZdJKmA'
+SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
