@@ -2,4 +2,4 @@
 /.idea
 benji_portfolio/__pycache__/
 db.sqlite3
-.env
+benji_portfolio/.env

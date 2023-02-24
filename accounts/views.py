@@ -16,6 +16,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.utils.safestring import mark_safe
 from django.views import View
 from django.contrib.auth.models import User
+from django.conf import settings
+from django.core.mail import send_mail
 
 
 # Create your views here.
@@ -134,8 +136,11 @@ def password_reset_request(request):
                     'token': account_activation_token.make_token(associated_user),
                     "protocol": 'https' if request.is_secure() else 'http'
                 })
-                email = EmailMessage(subject, message, to=[associated_user.email])
-                if email.send():
+                # email = EmailMessage(subject, message, to=[associated_user.email])
+                print(settings.EMAIL_HOST_USER)
+                email = send_mail(subject=subject, from_email=settings.EMAIL_HOST_USER, message=message,
+                                  recipient_list=[associated_user.email])
+                if email:
                     messages.success(request,
                                      """
                                      <h2>Password reset sent</h2><hr>
@@ -146,10 +151,14 @@ def password_reset_request(request):
                                      </p>
                                      """
                                      )
+                    messages.success(request, "Email Sent Successfully. Check your inbox!")
+                    return redirect('website:index')
                 else:
                     messages.error(request, "Problem sending reset password email, <b>SERVER PROBLEM</b>")
 
-            return redirect('website:index')
+            else:
+                messages.error(request, "Invalid email address. Try again!")
+                return redirect('accounts:password_reset')
 
         for error in list(form.errors.values()):
             messages.error(request, error)
