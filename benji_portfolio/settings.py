@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'accounts',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,7 +42,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'website',
     'my_finances',
-    'accounts',
     'crispy_forms',
     'crispy_bootstrap5',
 
@@ -150,6 +150,6 @@ EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 
 # RECAPCHA
-RECAPTCHA_PUBLIC_KEY = '6LcZU6okAAAAAAzvyLshHvOPyNNn_S2Qek8s9rd4'
-RECAPTCHA_PRIVATE_KEY = '6LcZU6okAAAAABFN-WhS-fp8w08Wbb1ycEZdJKmA'
+RECAPTCHA_PUBLIC_KEY = os.getenv("RECAPTCHA_PUBLIC_KEY")
+RECAPTCHA_PRIVATE_KEY = os.getenv("RECAPTCHA_PRIVATE_KEY")
 SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
