@@ -1,8 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from PIL import Image
-from django.contrib.auth.models import BaseUserManager
-from django.utils import timezone
+
 
 # Create your models here.
 # Extending User Model Using a One-To-One Link
@@ -32,16 +31,3 @@ class Profile(models.Model):
             # overwrite the larger image
             img.save(self.avatar.path)
 
-# Account activation
-# class CustomUser(BaseUserManager):
-#     activation_key = models.CharField(max_length=40, blank=True)
-#     key_expires = models.DateTimeField(default=timezone.now)
-#
-#     def activate(self, key):
-#         if self.activation_key == key and timezone.now() <= self.key_expires:
-#             self.is_active = True
-#             self.activation_key = ''
-#             self.key_expires = None
-#             self.save()
-#             return True
-#         return False

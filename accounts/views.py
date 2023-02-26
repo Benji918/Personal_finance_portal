@@ -5,11 +5,9 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
 from django.http import Http404
 from django.template.loader import render_to_string
-from django.utils import timezone
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from .forms import Set_Password_Form
-from .forms import Password_Reset_Form
+from .forms import Set_Password_Form, Password_Reset_Form
 from django.db.models.query_utils import Q
 from django.shortcuts import render, redirect
 from accounts.forms import CustomUSerCreationForm, UserUpdateForm, ProfileUpdateForm
@@ -40,47 +38,8 @@ def register(request):
     context = {'form': form}
     return render(request, 'accounts/register.html', context)
 
-
-def activate(request, uidb64, token):
-    User = get_user_model()
-    try:
-        uid = force_text(urlsafe_base64_decode(uidb64))
-        user = User.objects.get(pk=uid)
-    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-        user = None
-
-    if user and account_activation_token.check_token(user, token):
-        user.is_active = True
-        user.save()
-        messages.success(request, 'Thank you for your email confirmation. Now you can login your account.')
-        return redirect('accounts:login')
-    else:
-        messages.error(request, 'Activation link is invalid!')
-
-    return redirect('website:index')
-
-
-def send_activation_email(request, user):
-    current_site = get_current_site(request)
-    subject = 'Activate Your Account'
-    message = render_to_string('accounts/account_activation_email.html', {
-        'user': user,
-        'domain': current_site.domain,
-        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-        'token': account_activation_token.make_token(user),
-        'protocol': 'https' if request.is_secure() else 'http'
-    })
-    email = EmailMessage(
-        subject, message, to=[user.email]
-    )
-    if email.send():
-        messages.success(request, f'Dear <b>{user}</b>, please go to you email <b>{user.email}</b> inbox and click on \
-                received activation link to confirm and complete the registration. <b>Note:</b> Check your spam folder.')
-    else:
-        messages.error(request, f'Problem sending confirmation email to {user.email}, check if you typed it correctly.')
-
-
 def login_view(request):
+    form = LoginForm()
     if request.user.is_authenticated:
         messages.info(request, mark_safe(f'You are already logged in as <b>{request.user.username}</b>. To switch user'
                                          f' <a href="#" data-toggle="modal" data-target="#logoutModal"></i>'
@@ -91,14 +50,17 @@ def login_view(request):
         password = request.POST.get('password')
         remember_me = request.POST.get('remember_me')
         user = authenticate(request, username=username, password=password)
-        if user and user.is_active is True:
+        if user and user.is_active:
             login(request, user=user)
             messages.success(request, message=f'{user.email} successfully logged in!')
             if not remember_me:
                 request.session.set_expiry(0)
             return redirect('website:index')
         else:
-            messages.warning(request, 'Could not authenticate, check credentials.')
+            if not user.is_active:
+                messages.warning(request, 'Activate your account before logging in!.')
+            else:
+                messages.warning(request, 'Could not authenticate, check credentials.')
     return render(request, 'accounts/login.html')
 
 
@@ -147,7 +109,7 @@ class MyProfile(LoginRequiredMixin, View):
 
             return render(request, 'templates/base2d.html', context)
 
-
+# password views
 @login_required
 def password_change(request):
     user = request.user
@@ -240,3 +202,41 @@ def passwordResetConfirm(request, uidb64, token):
 
     messages.error(request, 'Something went wrong, redirecting back to Homepage')
     return redirect("accounts.login")
+
+def activate(request, uidb64, token):
+    User = get_user_model()
+    try:
+        uid = force_text(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+
+    if user and account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.save()
+        messages.success(request, 'Thank you for your email confirmation. Now you can login your account.')
+        return redirect('accounts:login')
+    else:
+        messages.error(request, 'Activation link is invalid!')
+
+    return redirect('website:index')
+
+
+def send_activation_email(request, user):
+    current_site = get_current_site(request)
+    subject = 'Activate Your Account'
+    message = render_to_string('accounts/account_activation_email.html', {
+        'user': user,
+        'domain': current_site.domain,
+        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+        'token': account_activation_token.make_token(user),
+        'protocol': 'https' if request.is_secure() else 'http'
+    })
+    email = EmailMessage(
+        subject, message, to=[user.email]
+    )
+    if email.send():
+        messages.success(request, f'Dear <b>{user}</b>, please go to you email <b>{user.email}</b> inbox and click on \
+                received activation link to confirm and complete the registration. <b>Note:</b> Check your spam folder.')
+    else:
+        messages.error(request, f'Problem sending confirmation email to {user.email}, check if you typed it correctly.')
