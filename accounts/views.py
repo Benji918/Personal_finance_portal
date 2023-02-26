@@ -3,7 +3,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
-from django.http import Http404
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -38,8 +37,8 @@ def register(request):
     context = {'form': form}
     return render(request, 'accounts/register.html', context)
 
+
 def login_view(request):
-    form = LoginForm()
     if request.user.is_authenticated:
         messages.info(request, mark_safe(f'You are already logged in as <b>{request.user.username}</b>. To switch user'
                                          f' <a href="#" data-toggle="modal" data-target="#logoutModal"></i>'
@@ -50,20 +49,21 @@ def login_view(request):
         password = request.POST.get('password')
         remember_me = request.POST.get('remember_me')
         user = authenticate(request, username=username, password=password)
-        if user and user.is_active:
-            login(request, user=user)
-            messages.success(request, message=f'{user.email} successfully logged in!')
-            if not remember_me:
-                request.session.set_expiry(0)
-            return redirect('website:index')
+        try:
+            if user and user.is_active:
+                login(request, user=user)
+                messages.success(request, message=f'{user.email} successfully logged in!')
+                if not remember_me:
+                    request.session.set_expiry(0)
+                return redirect('website:index')
+        except TypeError:
+            messages.warning(request, 'Activate your account before logging in!.')
         else:
-            if not user.is_active:
-                messages.warning(request, 'Activate your account before logging in!.')
-            else:
-                messages.warning(request, 'Could not authenticate, check credentials.')
+            messages.warning(request, 'Could not authenticate, check credentials.')
     return render(request, 'accounts/login.html')
 
 
+@login_required
 def logout_view(request):
     logout(request)
     messages.success(request, 'Logged out successfully!')
@@ -96,7 +96,6 @@ class MyProfile(LoginRequiredMixin, View):
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
-
             messages.success(request, 'Your profile has been updated successfully')
 
             return render(request, 'accounts/profile/profile.html')
@@ -107,7 +106,21 @@ class MyProfile(LoginRequiredMixin, View):
             }
             messages.error(request, 'Error updating you profile')
 
-            return render(request, 'templates/base2d.html', context)
+            return render(request, 'accounts/profile/profile.html', context)
+
+
+# DELETE USER ACCOUNT
+@login_required
+def delete_user_account(request):
+    if not request.user.is_authenticated:
+        return redirect("accounts:login")
+    if request.method == 'POST':
+        user = User.objects.get(username=request.user.username)
+        user.delete()
+        messages.success(request, f'{user} account successfully deleted!')
+        redirect('accounts.login')
+    return render(request, 'accounts/profile/delete_account.html')
+
 
 # password views
 @login_required
@@ -202,6 +215,7 @@ def passwordResetConfirm(request, uidb64, token):
 
     messages.error(request, 'Something went wrong, redirecting back to Homepage')
     return redirect("accounts.login")
+
 
 def activate(request, uidb64, token):
     User = get_user_model()
