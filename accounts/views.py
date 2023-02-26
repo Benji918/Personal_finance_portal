@@ -112,8 +112,6 @@ class MyProfile(LoginRequiredMixin, View):
 # DELETE USER ACCOUNT
 @login_required
 def delete_user_account(request):
-    if not request.user.is_authenticated:
-        return redirect("accounts:login")
     if request.method == 'POST':
         user = User.objects.get(username=request.user.username)
         user.delete()
