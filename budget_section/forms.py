@@ -1,5 +1,5 @@
 from django import forms
-from .models import Category, Transaction, BudgetTransaction, Budget
+from .models import Category, Transaction, Budget
 from datetime import date
 
 class DateInput(forms.DateInput):
@@ -26,8 +26,5 @@ class BudgetForm(forms.ModelForm):
     start_date = forms.DateField(widget=DateInput, initial=date.today())
     end_date = forms.DateField(widget=DateInput)
 
-# class BudgetTransactionForm(forms.ModelForm):
-#     class Meta:
-#         model = BudgetTransaction
-#         fields = ['budget', 'transactions']
+
 
