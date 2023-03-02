@@ -62,6 +62,15 @@ class BudgetUpdateView(View):
         messages.success(self.request, 'Budget updated successfully!')
         return reverse_lazy('budget_section:budget_update')
 
+@method_decorator(login_required, name='dispatch')
+class BudgetDetailView(DeleteView):
+    model = Budget
+    template_name = 'budget_section/category_transaction_budget_detail.html'
+    extra_context = {'detail_what': 'Budget'}
+
+    def get_queryset(self):
+        user = self.request.user
+        return Budget.objects.filter(user=user).order_by('-id')
 
 @method_decorator(login_required, name='dispatch')
 class BudgetDeleteView(DeleteView):
@@ -124,6 +133,15 @@ class CategoryUpdateView(View):
         messages.success(self.request, 'Category created successfully!')
         return reverse_lazy('budget_section:category_list')
 
+@method_decorator(login_required, name='dispatch')
+class CategoryDetailView(DeleteView):
+    model = Category
+    template_name = 'budget_section/category_transaction_budget_detail.html'
+    extra_context = {'detail_what': 'Category'}
+
+    def get_queryset(self):
+        user = self.request.user
+        return Category.objects.filter(user=user).order_by('-date')
 
 @method_decorator(login_required, name='dispatch')
 class CategoryDeleteView(DeleteView):
@@ -144,29 +162,11 @@ class CategoryDeleteView(DeleteView):
 class TransactionListView(ListView):
     model = Transaction
     template_name = 'budget_section/category_transaction_budget_list.html'
-    context_object_name = 'transactions'
+    extra_context = {'list_what': 'Category'}
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        # Get total amount spent in the last 7 days
-        today = datetime.date.today()
-        week_ago = today - timedelta(days=7)
-        context['total_spent_last_week'] = Transaction.objects.filter(date__range=[week_ago, today]).aggregate(
-            Sum('amount'))['amount__sum'] or 0
-
-        # Get average amount spent per category
-        context['average_spent_per_category'] = Transaction.objects.values('category__name').annotate(
-            average_spent=Avg('amount')).order_by('-date')[:5]
-
-        # Get total amount spent per category
-        context['total_spent_per_category'] = Transaction.objects.values('category__name').annotate(
-            total_spent=Sum('amount')).order_by('-date')[:5]
-
-        # Get the total categories
-        context['total_categories'] = Category.objects.count()
-
-        return context
+    def get_queryset(self):
+        user = self.request.user
+        return Transaction.objects.filter(user=user).order_by('-date')
 
 
 @method_decorator(login_required, name='dispatch')
@@ -203,6 +203,17 @@ class TransactionUpdateView(View):
     def get_success_url(self):
         messages.success(self.request, 'Transaction created successfully!')
         return reverse_lazy('budget_section:transaction_list')
+
+
+@method_decorator(login_required, name='dispatch')
+class TransactionDetailView(DeleteView):
+    model = Transaction
+    template_name = 'budget_section/category_transaction_budget_detail.html'
+    extra_context = {'detail_what': 'Transaction'}
+
+    def get_queryset(self):
+        user = self.request.user
+        return Transaction.objects.filter(user=user).order_by('-date')
 
 
 @method_decorator(login_required, name='dispatch')
