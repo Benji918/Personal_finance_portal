@@ -105,6 +105,48 @@
                     </div>
                 </div>
             </li>
+       <li class="nav-item{% if app_name == 'budget_section' %} active{% endif %}">
+            <a class="nav-link{% if app_name != 'budget_section' %} collapsed{% endif %}" href="#"
+               data-toggle="collapse" data-target="#collapse3"
+               aria-expanded="true" aria-controls="collapse3">
+                <i class="fas fa-fw fa-cog"></i>
+                <span>Budget section</span>
+            </a>
+            <div id="collapse3" class="collapse{% if app_name == 'budget_section' %} show{% endif %}"
+                 aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Dashboards:</h6>
+<!--                    {% url 'my_finances:current_period' as my_finances_current_period %}-->
+<!--                    {% url 'my_finances:year_overview' as my_finances_year_overview %}-->
+<!--                    <a class="collapse-item{% if page_path == my_finances_current_period %} active{% endif %}"-->
+<!--                       href="{{ my_finances_current_period }}">Current Period</a>-->
+<!--                    <a class="collapse-item{% if page_path == my_finances_year_overview %} active{% endif %}"-->
+<!--                       href="{{ my_finances_year_overview }}">Year Overview</a>-->
+
+                    <h6 class="collapse-header">Update records:</h6>
+                    {% url 'budget_section:budget_create' as budget_section_budget_create %}
+                    {% url 'budget_section:category_create' as budget_section_category_create %}
+                    {% url 'budget_section:transaction_create' as budget_section_transaction_create %}
+                    <a class="collapse-item{% if page_path == budget_section_budget_create %} active{% endif %}"
+                           href="{{ budget_section_budget_create }}">Add Budget</a>
+                    <a class="collapse-item{% if page_path == my_finances_income_create %} active{% endif %}"
+                       href="{{ budget_section_category_create }}">Add Category</a>
+                    <a class="collapse-item{% if page_path == my_finances_outcome_create %} active{% endif %}"
+                       href="{{budget_section_transaction_create }}">Add Transaction</a>
+
+                    <h6 class="collapse-header">View records:</h6>
+<!--                    {% url 'my_finances:balance_list' as my_finances_balance_list %}-->
+<!--                    {% url 'my_finances:income_list' as my_finances_income_list %}-->
+<!--                    {% url 'my_finances:outcome_list' as my_finances_outcome_list %}-->
+<!--                    <a class="collapse-item{% if page_path == my_finances_balance_list %} active{% endif %}"-->
+<!--                       href="{{ my_finances_balance_list }}">List Balance</a>-->
+<!--                    <a class="collapse-item{% if page_path == my_finances_income_list %} active{% endif %}"-->
+<!--                       href="{{ my_finances_income_list }}">List Income</a>-->
+<!--                    <a class="collapse-item{% if page_path == my_finances_outcome_list %} active{% endif %}"-->
+<!--                       href="{{ my_finances_outcome_list }}">List Outcome</a>-->
+                </div>
+            </div>
+        </li>
         {% endif %}
 
 

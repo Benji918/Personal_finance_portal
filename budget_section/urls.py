@@ -20,7 +20,7 @@ urlpatterns = [
     path('transaction/detail/<int:pk>/', TransactionDetailView.as_view(), name='transaction_detail'),
     path('transaction/delete/<int:pk>/', TransactionDeleteView.as_view(), name='transaction_delete'),
 
-    path('budgets', BudgetListView.as_view(), name='budget_list'),
+    path('budgets/', BudgetListView.as_view(), name='budget_list'),
     path('budget/create/', BudgetCreateView.as_view(), name='budget_create'),
     path('budget/update/<int:pk>/', BudgetUpdateView.as_view(), name='budget_update'),
     path('budget/detail/<int:pk>/', BudgetDetailView.as_view(), name='budget_detail'),

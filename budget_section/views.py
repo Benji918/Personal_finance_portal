@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
-
 from django.http import HttpResponseRedirect
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from django.urls import reverse_lazy, reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
@@ -22,13 +21,11 @@ class BudgetListView(ListView):
 
     def get_queryset(self):
         user = self.request.user
-        # categories = Category.objects.filter(user=request.user)
-        # transactions = Transaction.objects.filter(user=request.user).order_by('-date')
         return Budget.objects.filter(user=user).order_by('-start_date')
 
 
-@method_decorator(login_required, name='dispatch')
-class BudgetCreateView(View):
+# @method_decorator(login_required, name='dispatch')
+class BudgetCreateView(CreateView):
     model = Budget
     form_class = BudgetForm
     template_name = 'budget_section/category_transaction_budget_form.html'
@@ -46,7 +43,7 @@ class BudgetCreateView(View):
 
 
 @method_decorator(login_required, name='dispatch')
-class BudgetUpdateView(View):
+class BudgetUpdateView(UpdateView):
     model = Budget
     form_class = BudgetForm
     template_name = 'budget_section/category_transaction_budget_list.html'
@@ -63,7 +60,7 @@ class BudgetUpdateView(View):
         return reverse_lazy('budget_section:budget_update')
 
 @method_decorator(login_required, name='dispatch')
-class BudgetDetailView(DeleteView):
+class BudgetDetailView(DetailView):
     model = Budget
     template_name = 'budget_section/category_transaction_budget_detail.html'
     extra_context = {'detail_what': 'Budget'}
@@ -99,7 +96,7 @@ class CategoryListView(ListView):
         return Category.objects.filter(user=user).order_by('-id')
 
 @method_decorator(login_required, name='dispatch')
-class CategoryCreateView(View):
+class CategoryCreateView(CreateView):
     model = Category
     form_class = CategoryForm
     template_name = 'budget_section/category_transaction_budget_form.html'
@@ -117,7 +114,7 @@ class CategoryCreateView(View):
 
 
 @method_decorator(login_required, name='dispatch')
-class CategoryUpdateView(View):
+class CategoryUpdateView(UpdateView):
     model = Category
     form_class = CategoryForm
     template_name = 'budget_section/category_transaction_budget_form.html'
@@ -134,7 +131,7 @@ class CategoryUpdateView(View):
         return reverse_lazy('budget_section:category_list')
 
 @method_decorator(login_required, name='dispatch')
-class CategoryDetailView(DeleteView):
+class CategoryDetailView(DetailView):
     model = Category
     template_name = 'budget_section/category_transaction_budget_detail.html'
     extra_context = {'detail_what': 'Category'}
@@ -170,7 +167,7 @@ class TransactionListView(ListView):
 
 
 @method_decorator(login_required, name='dispatch')
-class TransactionCreateView(View):
+class TransactionCreateView(CreateView):
     model = Transaction
     form_class = TransactionForm
     template_name = 'budget_section/category_transaction_budget_form.html'
@@ -188,7 +185,7 @@ class TransactionCreateView(View):
 
 
 @method_decorator(login_required, name='dispatch')
-class TransactionUpdateView(View):
+class TransactionUpdateView(UpdateView):
     model = Transaction
     form_class = TransactionForm
     template_name = 'budget_section/category_transaction_budget_form.html'
@@ -206,7 +203,7 @@ class TransactionUpdateView(View):
 
 
 @method_decorator(login_required, name='dispatch')
-class TransactionDetailView(DeleteView):
+class TransactionDetailView(DetailView):
     model = Transaction
     template_name = 'budget_section/category_transaction_budget_detail.html'
     extra_context = {'detail_what': 'Transaction'}

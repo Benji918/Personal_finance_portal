@@ -14,7 +14,7 @@ class CategoryForm(forms.ModelForm):
 class TransactionForm(forms.ModelForm):
     class Meta:
         model = Transaction
-        fields = ['title', 'amount', 'date', 'notes']
+        fields = ['title', 'amount', 'category', 'budget', 'date', 'notes']
 
     date = forms.DateField(widget=DateInput, initial=date.today())
 
