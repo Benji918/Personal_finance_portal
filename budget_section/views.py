@@ -24,12 +24,12 @@ class BudgetListView(ListView):
         return Budget.objects.filter(user=user).order_by('-start_date')
 
 
-# @method_decorator(login_required, name='dispatch')
+@method_decorator(login_required, name='dispatch')
 class BudgetCreateView(CreateView):
     model = Budget
     form_class = BudgetForm
     template_name = 'budget_section/category_transaction_budget_form.html'
-    extra_context = {'header': 'Add budget'}
+    extra_context = {'header': 'Add Budget'}
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
@@ -138,7 +138,7 @@ class CategoryDetailView(DetailView):
 
     def get_queryset(self):
         user = self.request.user
-        return Category.objects.filter(user=user).order_by('-date')
+        return Category.objects.filter(user=user)
 
 @method_decorator(login_required, name='dispatch')
 class CategoryDeleteView(DeleteView):
@@ -159,7 +159,7 @@ class CategoryDeleteView(DeleteView):
 class TransactionListView(ListView):
     model = Transaction
     template_name = 'budget_section/category_transaction_budget_list.html'
-    extra_context = {'list_what': 'Category'}
+    extra_context = {'list_what': 'Transaction'}
 
     def get_queryset(self):
         user = self.request.user
@@ -198,7 +198,7 @@ class TransactionUpdateView(UpdateView):
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
-        messages.success(self.request, 'Transaction created successfully!')
+        messages.success(self.request, 'Transaction updated successfully!')
         return reverse_lazy('budget_section:transaction_list')
 
 

@@ -1,10 +1,43 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base2.html' %}
+{% block content %}
+<div class="row">
 
-</body>
-</html>
+    <div class="col-lg-8 mx-auto">
+        <h1>{{detail_what}} {{object.id}}</h1>
+        <ul>
+            {% if detail_what == 'Budget' %}
+                <li>{{ object.name }}</li>
+                <li>{{ object.amount }}</li>
+                <li>{{ object.start_date|date:"Y/m/d" }}</li>
+                <li>{{ object.end_date|date:"Y/m/d" }}</li>
+            {% endif %}
+
+            {% if detail_what == 'Category' %}
+                  <li>{{ object.name }}</li>
+                  <li>{{ object.description }}</li>
+            {% endif %}
+
+             {% if detail_what == 'Transaction' %}
+                  <li>{{ object.title }}</li>
+                  <li>{{ object.amount }}</li>
+                  <li>{{ object.category }}</li>
+                  <li>{{ object.budget }}</li>
+                  <li>{{ object.date|date:"Y/m/d" }}</li>
+                  <li>{{ object.notes }}</li>
+            {% endif %}
+        </ul>
+        {% if detail_what == 'Budget' %}
+        <a href="{% url 'budget_section:budget_update' object.id %}">Update</a>
+        <a href="{% url 'budget_section:budget_delete' object.id %}">Delete</a>
+        {% elif detail_what == 'Category' %}
+        <a href="{% url 'budget_section:category_update' object.id %}">Update</a>
+        <a href="{% url 'budget_section:category_delete' object.id %}">Delete</a>
+        {% else %}
+        <a href="{% url 'budget_section:transaction_update' object.id %}">Update</a>
+        <a href="{% url 'budget_section:transaction_delete' object.id %}">Delete</a>
+        {% endif %}
+
+
+    </div>
+</div>
+{% endblock %}

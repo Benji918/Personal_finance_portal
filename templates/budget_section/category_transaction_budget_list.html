@@ -1,10 +1,115 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base2.html' %}
+{% load static %}
 
-</body>
-</html>
+{% block content %}
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+
+            <h1>{{ list_what }} list</h1>
+
+        </div>
+    </div>
+
+    <!-- Table-->
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+
+            {% if object_list %}
+                <table id="list-table" class="table">
+                    <thead>
+                    <tr>
+                        {% if list_what == 'Budget' %}
+                        <th scope="col">Name</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Start date</th>
+                        <th scope="col">End date</th>
+
+                        {% elif list_what == 'Category' %}
+                        <th scope="col">Name</th>
+                        <th scope="col">Description</th>
+
+                        {% elif list_what == 'Transaction' %}
+                        <th scope="col">Title</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">Budget</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Notes</th>
+                        {% endif %}
+                    </tr>
+                    </thead>
+                    <tbody id="table-body">
+                    {% for object in object_list %}
+                        <tr>
+                            {% if list_what == 'Budget' %}
+                            <td>{{ object.name }}</td>
+                            <td>{{ object.amount }}</td>
+                            <td>{{ object.start_date|date:"Y/m/d" }}</td>
+                            <td>{{ object.end_date|date:"Y/m/d" }}</td>
+                            {% endif %}
+
+                            {% if list_what == 'Category' %}
+                                  <td>{{ object.name }}</td>
+                                  <td>{{ object.description }}</td>
+                            {% endif %}
+
+                             {% if list_what == 'Transaction' %}
+                                  <td>{{ object.title }}</td>
+                                  <td>{{ object.amount }}</td>
+                                  <td>{{ object.category }}</td>
+                                  <td>{{ object.budget }}</td>
+                                  <td>{{ object.date|date:"Y/m/d" }}</td>
+                                  <td>{{ object.notes }}</td>
+                            {% endif %}
+                            <td>
+                                {% if list_what == 'Budget' %}
+                                    <a href="{% url 'budget_section:budget_details' object.pk %}">
+                                {% elif list_what == 'Category' %}
+                                    <a href="{% url 'budget_section:category_details' object.pk %}">
+                                {% else %}
+                                    <a href="{% url 'budget_section:transaction_details' object.pk %}">
+                                {% endif %}
+                                <i class="fas fa-search-plus"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                Nothing to show
+            {% endif %}
+
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block js %}
+    <!-- Page level plugins -->
+    <script src="{% static 'vendor/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#list-table').DataTable(
+                {
+                    order: [[0, "desc"]],
+                    columns: [
+                        {name: "Date", orderable: true},
+                        {% if list_what != 'Balance' %}
+                            {name: "End", orderable: true},
+                        {% endif %}
+                        {name: "Type", orderable: true},
+                        {name: "Value", orderable: true},
+                        {% if list_what != 'Balance' %}
+                            {name: "Repetition", orderable: true},
+                        {% endif %}
+                        {name: "Comment", orderable: true},
+                        {name: "Details", orderable: false},
+                    ]
+                }
+            );
+        })
+    </script>
+{% endblock %}
