@@ -3,7 +3,7 @@ from budget_section import views
 from budget_section.views import CategoryCreateView, TransactionUpdateView, TransactionCreateView, CategoryUpdateView, \
     BudgetCreateView, BudgetUpdateView, BudgetListView, CategoryListView, BudgetDeleteView, \
     CategoryDeleteView, TransactionListView, TransactionDeleteView, CategoryDetailView, TransactionDetailView, \
-    BudgetDetailView
+    BudgetDetailView, GetSummaryTiles
 
 app_name = 'budget_section'
 
@@ -27,7 +27,7 @@ urlpatterns = [
     path('budget/detail/<int:pk>/', BudgetDetailView.as_view(), name='budget_details'),
     path('budget/delete/<int:pk>/',  BudgetDeleteView.as_view(), name='budget_delete'),
     # DASHBOARD URLS
-    path('budget/summary_titles/<int:pk>',  views.get_summary_tiles, name='budget_summary'),
-    path('budget/current_period/<int:pk>',  views.current_period, name='budget_current_period'),
+    path('budget/current_period/<int:pk>',  GetSummaryTiles.as_view(), name='budget_summary'),
+    # path('budget/current_period/',  views.current_period, name='budget_current_period'),
 
 ]

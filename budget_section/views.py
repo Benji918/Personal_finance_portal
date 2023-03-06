@@ -228,15 +228,6 @@ class TransactionDeleteView(DeleteView):
         return reverse_lazy('budget_section:transaction_list')
 
 
-def current_period(request):
-    make_calls = True
-    last_budget = Budget.objects.filter(user=request.user).order_by('-date').first()
-    if not last_budget:
-        messages.warning(request, 'No budget has been recorded. '
-                                  'Please add at least one budget record.')
-        make_calls = False
-    return render(request, 'budget_section/current_period.html', context={'make_calls': make_calls})
-
 def get_summary_tiles(request, pk=id):
     # today = datetime.today()
     # Get the budget ID from the URL parameters
@@ -263,5 +254,56 @@ def get_summary_tiles(request, pk=id):
 
 
     })
-    # return render(request, 'budget_section/current_period.html')
+
+class GetSummaryTiles(ListView):
+    model = Budget
+    template_name = 'budget_section/current_period.html'
+    context_object_name = 'budget_data'
+
+    def get_queryset(self):
+        # Get the budget from the URL parameters
+        budget_id = self.kwargs['pk']
+
+        # Get the budget object
+        budget = Budget.objects.get(id=budget_id)
+
+        # Filter transactions by the budget
+        transactions = Transaction.objects.filter(budget=budget)
+
+        return transactions
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Get the budget ID from the URL parameters
+        budget_id = self.kwargs['pk']
+
+        # Get the budget object
+        budget = Budget.objects.get(id=budget_id)
+
+        # Add the budget object to the context
+        context['budget'] = budget
+
+        # Get the total amount spent in the budget
+        context['total_spent'] = Transaction.objects.filter(budget=budget).aggregate(Sum('amount'))['amount__sum'] or 0
+
+        # Get the total number of transactions in the budget
+        context['total_budget_transactions'] = Transaction.objects.filter(budget=budget).count()
+
+        # Get the total budget amount
+        context['total_budget'] = budget.amount
+
+        # Budget amount spent
+        context['budget_amount_spent'] = context['total_budget'] - context['total_spent']
+
+        # Calculate the percentage spent
+        if context['total_budget'] > 0:
+            percentage_spent = round(context['total_spent'] / context['total_budget'] * 100, 2)
+        else:
+            percentage_spent = 0
+
+        # Add the percentage spent to the context
+        context['percentage_spent'] = percentage_spent
+
+        return context
 
