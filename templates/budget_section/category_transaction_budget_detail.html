@@ -29,6 +29,7 @@
         {% if detail_what == 'Budget' %}
         <a href="{% url 'budget_section:budget_update' object.id %}">Update</a>
         <a href="{% url 'budget_section:budget_delete' object.id %}">Delete</a>
+        <a href="{% url 'budget_section:budget_summary' object.id %}">View Dashboard</a>
         {% elif detail_what == 'Category' %}
         <a href="{% url 'budget_section:category_update' object.id %}">Update</a>
         <a href="{% url 'budget_section:category_delete' object.id %}">Delete</a>

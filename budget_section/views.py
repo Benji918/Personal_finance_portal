@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from django.urls import reverse_lazy, reverse
 from django.shortcuts import render, redirect, get_object_or_404
@@ -226,3 +226,41 @@ class TransactionDeleteView(DeleteView):
     def get_success_url(self):
         messages.success(self.request, 'Transaction deleted successfully!')
         return reverse_lazy('budget_section:transaction_list')
+
+
+def current_period(request):
+    make_calls = True
+    last_budget = Budget.objects.filter(user=request.user).order_by('-date').first()
+    if not last_budget:
+        messages.warning(request, 'No budget has been recorded. '
+                                  'Please add at least one budget record.')
+        make_calls = False
+    return render(request, 'budget_section/current_period.html', context={'make_calls': make_calls})
+
+def get_summary_tiles(request, pk=id):
+    # today = datetime.today()
+    # Get the budget ID from the URL parameters
+    budget = Budget.objects.filter(id=pk, user=request.user)
+    # Get the total number of transactions in the budget
+    total_budget_transactions = Transaction.objects.filter(budget=budget[:1]).count()
+    # Get the total amount spent in the budget
+    total_amount_spent = Transaction.objects.filter(budget=budget[:1]).aggregate(Sum('amount'))['amount__sum'] or 0
+    # Get the total budget amount
+    total_budget = budget.amount
+    print(total_budget)
+    # Calculate the percentage spent
+    if total_budget > 0:
+        percentage_spent = round(total_amount_spent / budget.amount * 100, 2)
+    else:
+        percentage_spent = 0
+    return JsonResponse({
+        'budget_balance': budget.amount,
+        'budget_date': budget.created_at,
+        'total_budget_transactions': total_budget_transactions,
+        'budget_amount_left': budget.amount - total_amount_spent,
+        'budget_amount_left_in_percentage': percentage_spent,
+
+
+    })
+    # return render(request, 'budget_section/current_period.html')
+
