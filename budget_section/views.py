@@ -46,7 +46,7 @@ class BudgetCreateView(CreateView):
 class BudgetUpdateView(UpdateView):
     model = Budget
     form_class = BudgetForm
-    template_name = 'budget_section/category_transaction_budget_list.html'
+    template_name = 'budget_section/category_transaction_budget_form.html'
     extra_context = {'header': 'Update Budget'}
 
     def form_valid(self, form):
@@ -57,7 +57,7 @@ class BudgetUpdateView(UpdateView):
 
     def get_success_url(self):
         messages.success(self.request, 'Budget updated successfully!')
-        return reverse_lazy('budget_section:budget_update')
+        return reverse_lazy('budget_section:budget_list')
 
 @method_decorator(login_required, name='dispatch')
 class BudgetDetailView(DetailView):
@@ -127,7 +127,7 @@ class CategoryUpdateView(UpdateView):
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
-        messages.success(self.request, 'Category created successfully!')
+        messages.success(self.request, 'Category updated successfully!')
         return reverse_lazy('budget_section:category_list')
 
 @method_decorator(login_required, name='dispatch')
@@ -189,7 +189,7 @@ class TransactionUpdateView(UpdateView):
     model = Transaction
     form_class = TransactionForm
     template_name = 'budget_section/category_transaction_budget_form.html'
-    extra_context = {'header': 'Add Transaction'}
+    extra_context = {'header': 'Update Transaction'}
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
@@ -240,11 +240,12 @@ def current_period(request):
 def get_summary_tiles(request, pk=id):
     # today = datetime.today()
     # Get the budget ID from the URL parameters
-    budget = Budget.objects.filter(id=pk, user=request.user)
+    budget = Budget.objects.get(id=pk, user=request.user)
+    print(budget.amount)
     # Get the total number of transactions in the budget
-    total_budget_transactions = Transaction.objects.filter(budget=budget[:1]).count()
+    total_budget_transactions = Transaction.objects.filter(budget=budget).count()
     # Get the total amount spent in the budget
-    total_amount_spent = Transaction.objects.filter(budget=budget[:1]).aggregate(Sum('amount'))['amount__sum'] or 0
+    total_amount_spent = Transaction.objects.filter(budget=budget).aggregate(Sum('amount'))['amount__sum'] or 0
     # Get the total budget amount
     total_budget = budget.amount
     print(total_budget)
