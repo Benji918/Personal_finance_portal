@@ -1,8 +1,11 @@
+import datetime
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
 from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse_lazy
+from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 
@@ -289,7 +292,7 @@ class GetSummaryTiles(ListView):
         # Add the budget object to the context
         context['budget'] = budget
 
-        # Get the total amount spent in the budgets
+        # Get the total amount spent in the budget
         context['total_spent'] = Transaction.objects.filter(budget=budget).aggregate(Sum('amount'))['amount__sum'] or 0
 
         # Get the total number of transactions in the budget
@@ -298,6 +301,8 @@ class GetSummaryTiles(ListView):
         # Get the total budget amount
         context['total_budget'] = budget.amount
 
+        # Get the current date
+        context['today'] = datetime.date.today()
         # Get budget start_date
         context['budget_start_date'] = budget.start_date
 
@@ -319,5 +324,16 @@ class GetSummaryTiles(ListView):
 
         # Add the percentage spent to the context
         context['percentage_spent'] = percentage_spent
+
+        # Get budget_daily_spending for line chart
+        budget = Budget.objects.get(id=budget_id)
+        transactions = Transaction.objects.filter(budget=budget)
+        today = timezone.localdate()
+        daily_spending = {}
+        for i in range(7):
+            date = today - datetime.timedelta(days=i)
+            total_spent = transactions.filter(date=date).aggregate(Sum('amount'))['amount__sum'] or 0
+            daily_spending[date.strftime('%Y-%m-%d')] = total_spent
+        context['daily_spending'] = {'daily_spending': daily_spending}
 
         return context

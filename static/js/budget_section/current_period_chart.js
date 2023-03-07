@@ -1,24 +1,38 @@
-$(document).ready(function () {
-    $.get("/budget_section/get_summary_tiles/<int:pk>", function (data) {
-        for (const [data_name, v] of Object.entries(data)) {
-            if (data_name === 'error') {
-                $('#summary_tiles').html(v)
-            } else if (data_name === 'budget_date') {
-                $(`#${data_name}`).html(v)
-            } else {
-                $(`#${data_name}`).html(
-                    new Intl.NumberFormat('en-IE', {style: 'currency', currency: 'NGN'}).format(v)
-                )
-            }
+
+var ctx = document.getElementById('daily-spending-chart');
+var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: [
+            {% for date, spending in daily_spending.items %}
+            "{{ date }}",
+            {% endfor %}
+        ],
+        datasets: [{
+            label: 'Daily Spending',
+            data: [
+                {% for date, spending in daily_spending.items %}
+                {{ spending }},
+                {% endfor %}
+            ],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
         }
-    });
+    }
+});
+console.log(daily_spending);
 
-//    $.get("/my_finances/get_income_or_outcome_by_type?get_what=income&summary_type=current_period", function (res) {
-//        doughnut_chart(res, 'income_by_type')
-//    });
-//
-//    $.get("/my_finances/get_income_or_outcome_by_type?get_what=outcome&summary_type=current_period", function (res) {
-//        doughnut_chart(res, 'outcome_by_type')
-//    });
-
-})
