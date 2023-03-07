@@ -3,10 +3,11 @@ var ctx = document.getElementById('daily-spending-chart');
 var myChart = new Chart(ctx, {
     type: 'line',
     data: {
-        labels: Object.keys(daily_spending),
+         labels: ["January", "February", "March", "April", "May", "June"],
         datasets: [{
             label: 'Daily Spending',
             data: Object.values(daily_spending),
+
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
             ],
@@ -26,3 +27,5 @@ var myChart = new Chart(ctx, {
         }
     }
 });
+console.log(Object.keys(daily_spending))
+console.log(Object.values(daily_spending))
