@@ -1,15 +1,13 @@
-from datetime import datetime, timedelta
-from django.http import HttpResponseRedirect, JsonResponse
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
-from django.urls import reverse_lazy, reverse
-from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.db.models import Sum, Avg
-from django.views import View
-from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-from .models import Category, Transaction, Budget
+from django.db.models import Sum
+from django.http import HttpResponseRedirect, JsonResponse
+from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
+
 from .forms import CategoryForm, TransactionForm, BudgetForm
+from .models import Category, Transaction, Budget
 
 
 # BUDGET
@@ -291,7 +289,7 @@ class GetSummaryTiles(ListView):
         # Add the budget object to the context
         context['budget'] = budget
 
-        # Get the total amount spent in the budget
+        # Get the total amount spent in the budgets
         context['total_spent'] = Transaction.objects.filter(budget=budget).aggregate(Sum('amount'))['amount__sum'] or 0
 
         # Get the total number of transactions in the budget
