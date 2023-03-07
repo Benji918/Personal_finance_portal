@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Category, Transaction, Budget
 from .forms import CategoryForm, TransactionForm, BudgetForm
 
+
 # BUDGET
 @method_decorator(login_required, name='dispatch')
 class BudgetListView(ListView):
@@ -59,6 +60,7 @@ class BudgetUpdateView(UpdateView):
         messages.success(self.request, 'Budget updated successfully!')
         return reverse_lazy('budget_section:budget_list')
 
+
 @method_decorator(login_required, name='dispatch')
 class BudgetDetailView(DetailView):
     model = Budget
@@ -68,6 +70,7 @@ class BudgetDetailView(DetailView):
     def get_queryset(self):
         user = self.request.user
         return Budget.objects.filter(user=user).order_by('-id')
+
 
 @method_decorator(login_required, name='dispatch')
 class BudgetDeleteView(DeleteView):
@@ -83,6 +86,7 @@ class BudgetDeleteView(DeleteView):
         messages.success(self.request, 'Budget deleted successfully!')
         return reverse_lazy('budget_section:budget_list')
 
+
 # CATEGORY
 @method_decorator(login_required, name='dispatch')
 class CategoryListView(ListView):
@@ -94,6 +98,7 @@ class CategoryListView(ListView):
     def get_queryset(self):
         user = self.request.user
         return Category.objects.filter(user=user).order_by('-id')
+
 
 @method_decorator(login_required, name='dispatch')
 class CategoryCreateView(CreateView):
@@ -130,6 +135,7 @@ class CategoryUpdateView(UpdateView):
         messages.success(self.request, 'Category updated successfully!')
         return reverse_lazy('budget_section:category_list')
 
+
 @method_decorator(login_required, name='dispatch')
 class CategoryDetailView(DetailView):
     model = Category
@@ -139,6 +145,7 @@ class CategoryDetailView(DetailView):
     def get_queryset(self):
         user = self.request.user
         return Category.objects.filter(user=user)
+
 
 @method_decorator(login_required, name='dispatch')
 class CategoryDeleteView(DeleteView):
@@ -252,8 +259,8 @@ def get_summary_tiles(request, pk=id):
         'budget_amount_left': budget.amount - total_amount_spent,
         'budget_amount_left_in_percentage': percentage_spent,
 
-
     })
+
 
 class GetSummaryTiles(ListView):
     model = Budget
@@ -293,12 +300,22 @@ class GetSummaryTiles(ListView):
         # Get the total budget amount
         context['total_budget'] = budget.amount
 
+        # Get budget start_date
+        context['budget_start_date'] = budget.start_date
+
+        # Get budget end_date
+        context['budget_end_date'] = budget.end_date
+
         # Budget amount spent
         context['budget_amount_spent'] = context['total_budget'] - context['total_spent']
 
         # Calculate the percentage spent
         if context['total_budget'] > 0:
-            percentage_spent = round(context['total_spent'] / context['total_budget'] * 100, 2)
+            percentage_spent = round(context['budget_amount_spent'] / context['total_budget'] * 100, 2)
+            if percentage_spent == 100:
+                percentage_spent = 0
+            else:
+                percentage_spent = 100 - percentage_spent
         else:
             percentage_spent = 0
 
@@ -306,4 +323,3 @@ class GetSummaryTiles(ListView):
         context['percentage_spent'] = percentage_spent
 
         return context
-

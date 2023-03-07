@@ -5,9 +5,9 @@
 {% block content %}
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Current Year</h1>
+        <h1 class="h3 mb-0 text-gray-800">Current Period</h1>
     </div>
-
+{% if budget %}
     <div class="row" id="summary_tiles">
 
         <div class="col-xl-3 col-md-6 mb-4">
@@ -19,7 +19,7 @@
                                 Budget balance
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800" id="budget_balance">{{total_budget}}</div>
-                            <div class="text-black-50 small" id="budget_date"><i><b></b></i></div>
+                            <div class="text-black-50 small" id="budget_date"><i><b>{{budget_start_date}} - {{budget_end_date}}</b></i></div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -37,7 +37,7 @@
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                 Budget Balance Now
                             </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="budget_amount_left"></div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="budget_amount_spent">{{budget_amount_spent}}</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -56,12 +56,12 @@
                                             </div>
                                             <div class="row no-gutters align-items-center">
                                                 <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
+                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{percentage_spent}}%</div>
                                                 </div>
                                                 <div class="col">
                                                     <div class="progress progress-sm mr-2">
                                                         <div class="progress-bar bg-info" role="progressbar"
-                                                            style="width: 50%" aria-valuenow="50" aria-valuemin="0"
+                                                            style="width: {{percentage_spent}}" aria-valuenow="{{percentage_spent}}" aria-valuemin="0"
                                                             aria-valuemax="100"></div>
                                                     </div>
                                                 </div>
@@ -81,9 +81,9 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                Budget Percentage spent
+                                Total Budget Transactions
                             </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="budget_amount_left_in_percentage"></div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="Total Budget Transactions">{{total_budget_transactions}}</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-comments fa-2x text-gray-300"></i>
@@ -152,8 +152,9 @@
             </div>
         </div>
     </div>
-
+{% else %}
     <b>No data available!</b>
+{% endif %}
 
 
 {% endblock %}
