@@ -1,4 +1,5 @@
 import datetime
+import json
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -333,7 +334,7 @@ class GetSummaryTiles(ListView):
         for i in range(7):
             date = today - datetime.timedelta(days=i)
             total_spent = transactions.filter(date=date).aggregate(Sum('amount'))['amount__sum'] or 0
-            daily_spending[date.strftime('%Y-%m-%d')] = total_spent
-        context['daily_spending'] = {'daily_spending': daily_spending}
+            daily_spending[date.strftime('%Y-%m-%d')] = float(total_spent)
+        context['daily_spending'] = json.dumps({'daily_spending': daily_spending})
 
         return context

@@ -3,18 +3,10 @@ var ctx = document.getElementById('daily-spending-chart');
 var myChart = new Chart(ctx, {
     type: 'line',
     data: {
-        labels: [
-            {% for date, spending in daily_spending.items %}
-            "{{ date }}",
-            {% endfor %}
-        ],
+        labels: Object.keys(daily_spending),
         datasets: [{
             label: 'Daily Spending',
-            data: [
-                {% for date, spending in daily_spending.items %}
-                {{ spending }},
-                {% endfor %}
-            ],
+            data: Object.values(daily_spending),
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
             ],
@@ -34,5 +26,3 @@ var myChart = new Chart(ctx, {
         }
     }
 });
-console.log(daily_spending);
-
