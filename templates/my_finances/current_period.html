@@ -140,7 +140,7 @@
                 <!-- Card Body -->
                 <div class="card-body">
                     <div class="chart-area">
-                        <canvas id="outcome_by_type"></canvas>
+                        <canvas id="myAreaChart"></canvas>
                     </div>
                 </div>
             </div>
@@ -158,7 +158,6 @@
  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"
             integrity="sha512-Wt1bJGtlnMtGP0dqNFH1xlkLBNpEodaiQ8ZN5JLA5wpc1sUlk/O5uuOMNgvzddzkpvZ9GLyYNa8w2s7rqiTk5Q=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="{% static 'js/my_finances/common_chart.js' %}"></script>
     <script src="{% static 'js/my_finances/current_period_chart.js' %}"></script>
     {% endif %}
 {% endblock %}

@@ -327,14 +327,17 @@ class GetSummaryTiles(ListView):
         context['percentage_spent'] = percentage_spent
 
         # Get budget_daily_spending for line chart
-        budget = Budget.objects.get(id=budget_id)
-        transactions = Transaction.objects.filter(budget=budget)
-        today = timezone.localdate()
-        daily_spending = {}
-        for i in range(7):
-            date = today - datetime.timedelta(days=i)
-            total_spent = transactions.filter(date=date).aggregate(Sum('amount'))['amount__sum'] or 0
-            daily_spending[date.strftime('%Y-%m-%d')] = float(total_spent)
-        context['daily_spending'] = json.dumps({'daily_spending': daily_spending})
-
+        # budget = Budget.objects.get(id=budget_id)
+        # transactions = Transaction.objects.filter(budget=budget)
+        # today = timezone.localdate()
+        labels = ["Jan", "Feb", "Mar", "Apr"]
+        data = [100, 80, 150, 200]
+        # for i in range(7):
+        #     date = today - datetime.timedelta(days=i)
+        #     serialized_date = date.isoformat()
+        #     total_spent = float(transactions.filter(date=date).aggregate(Sum('amount'))['amount__sum'] or 0)
+        #     labels.append(serialized_date)
+        #     data.append(total_spent)
+        context['labels'] = json.dumps(labels)
+        context['data'] = json.dumps(data)
         return context

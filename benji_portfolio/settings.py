@@ -44,11 +44,18 @@ INSTALLED_APPS = [
     'website',
     'accounts',
     'my_finances',
+    'budget_section',
     'crispy_forms',
     'crispy_bootstrap5',
-
-
+    # 'captcha',
+    # 'django.contrib.humanize',
 ]
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5 MB
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
