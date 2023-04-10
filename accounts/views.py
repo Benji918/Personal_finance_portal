@@ -1,23 +1,24 @@
 from babel._compat import force_text
+from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
+from django.core.mail import send_mail
+from django.db.models.query_utils import Q
+from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from .forms import Set_Password_Form, Password_Reset_Form
-from django.db.models.query_utils import Q
-from django.shortcuts import render, redirect
-from accounts.forms import CustomUSerCreationForm, UserUpdateForm, ProfileUpdateForm
-from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
 from django.utils.safestring import mark_safe
 from django.views import View
-from django.contrib.auth.models import User
-from django.contrib.auth import get_user_model
-from django.conf import settings
-from django.core.mail import send_mail
+
+from accounts.forms import CustomUSerCreationForm, UserUpdateForm, ProfileUpdateForm
+from .forms import Set_Password_Form, Password_Reset_Form
 from .tokens import account_activation_token
 
 
@@ -134,7 +135,7 @@ def password_change(request):
                 messages.error(request, error)
 
     form = Set_Password_Form(user)
-    return render(request, 'accounts/password-reset/password_reset_confirm.html', {'form': form})
+    return render(request, 'accounts/password_reset_confirm.html', {'form': form})
 
 
 def password_reset_request(request):
