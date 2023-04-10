@@ -38,8 +38,6 @@ class CustomUSerCreationForm(UserCreationForm):
         return instance
 
 
-
-
 # for profile update
 class UserUpdateForm(forms.ModelForm):
     class Meta:

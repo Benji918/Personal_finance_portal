@@ -166,7 +166,7 @@ var myLineChart = new Chart(ctx, {
   data: {
     labels: {{labels|safe}} ,
     datasets: [{
-      label: "Earnings",
+      label: "Budget Transactions",
       lineTension: 0.3,
       backgroundColor: "rgba(78, 115, 223, 0.05)",
       borderColor: "rgba(78, 115, 223, 1)",
@@ -253,10 +253,11 @@ var myLineChart = new Chart(ctx, {
 // Pie Chart Example
 var ctx = document.getElementById("myPieChart");
 var myPieChart = new Chart(ctx, {
-  type: 'doughnut',
+  type: 'pie',
   data: {
     labels: {{labels_2|safe}},
     datasets: [{
+      label: "Category spending",
       data: {{data_2|safe}},
       backgroundColor: ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf'],
       hoverBackgroundColor: ['#5193d8', '#ffad5c', '#55c16e', '#e65454', '#b48fd6', '#aa7c64', '#eeace7', '#a1a1a1', '#d3d35a', '#56c6e8'],
@@ -287,13 +288,13 @@ var ctx = document.getElementById("myBarChart");
 var myBarChart = new Chart(ctx, {
   type: 'bar',
   data: {
-    labels: {{labels_3|safe}},
+    labels: {{data_3|safe}},
     datasets: [{
-      label: "Revenue",
+      label: "Aggregate Budget Spending",
      backgroundColor: ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf'],
       hoverBackgroundColor: ['#5193d8', '#ffad5c', '#55c16e', '#e65454', '#b48fd6', '#aa7c64', '#eeace7', '#a1a1a1', '#d3d35a', '#56c6e8'],
       borderColor: "#4e73df",
-      data: {{data_3|safe},
+      data: {{data_3|safe}},
     }],
   },
   options: {

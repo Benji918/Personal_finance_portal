@@ -270,18 +270,6 @@ class GetSummaryTiles(ListView):
     template_name = 'budget_section/current_period.html'
     context_object_name = 'budget_data'
 
-    def get_queryset(self):
-        # Get the budget from the URL parameters
-        budget_id = self.kwargs['pk']
-
-        # Get the budget object
-        budget = Budget.objects.get(id=budget_id)
-
-        # Filter transactions by the budget
-        transactions = Transaction.objects.filter(budget=budget)
-
-        return transactions
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
@@ -352,7 +340,7 @@ class GetSummaryTiles(ListView):
         for category in categories:
             amount = Transaction.objects.filter(
                 budget=budget,
-                category=category.budget,
+                category=category,
                 date__gte=datetime.now() - timedelta(days=7)
             ).aggregate(Sum('amount')).get('amount__sum') or 0
             labels_2.append(category.name)
@@ -366,8 +354,8 @@ class GetSummaryTiles(ListView):
                 budget=budget,
                 date__gte=datetime.now() - timedelta(days=7)
             ).aggregate(Sum('amount')).get('amount__sum') or 0
-            labels.append(budget.name)
-            data.append(float(amount))
+            labels_3.append(budget.name)
+            data_3.append(float(amount))
         context['labels_3'] = json.dumps(labels_3)
         context['data_3'] = json.dumps(data_3)
         return context
