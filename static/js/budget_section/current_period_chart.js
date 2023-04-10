@@ -1,10 +1,9 @@
-
-// Area Chart Example
+// Line Chart
 var ctx = document.getElementById("myAreaChart");
 var myLineChart = new Chart(ctx, {
   type: 'line',
   data: {
-    labels: {{ labels|safe }} ,
+    labels: {{labels|safe}} ,
     datasets: [{
       label: "Earnings",
       lineTension: 0.3,
@@ -18,7 +17,7 @@ var myLineChart = new Chart(ctx, {
       pointHoverBorderColor: "rgba(78, 115, 223, 1)",
       pointHitRadius: 10,
       pointBorderWidth: 2,
-      data: {{ data|safe }},
+      data: {{data|safe}},
     }],
   },
   options: {

@@ -1,5 +1,6 @@
 import datetime
 import json
+from datetime import datetime, timedelta
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -302,8 +303,6 @@ class GetSummaryTiles(ListView):
         # Get the total budget amount
         context['total_budget'] = budget.amount
 
-        # Get the current date
-        context['today'] = datetime.date.today()
         # Get budget start_date
         context['budget_start_date'] = budget.start_date
 
@@ -318,8 +317,6 @@ class GetSummaryTiles(ListView):
             percentage_spent = round(context['budget_amount_spent'] / context['total_budget'] * 100, 2)
             if percentage_spent == 100:
                 percentage_spent = 0
-            else:
-                percentage_spent = 100 - percentage_spent
         else:
             percentage_spent = 0
 
@@ -327,17 +324,50 @@ class GetSummaryTiles(ListView):
         context['percentage_spent'] = percentage_spent
 
         # Get budget_daily_spending for line chart
-        # budget = Budget.objects.get(id=budget_id)
-        # transactions = Transaction.objects.filter(budget=budget)
-        # today = timezone.localdate()
-        labels = ["Jan", "Feb", "Mar", "Apr"]
-        data = [100, 80, 150, 200]
-        # for i in range(7):
-        #     date = today - datetime.timedelta(days=i)
-        #     serialized_date = date.isoformat()
-        #     total_spent = float(transactions.filter(date=date).aggregate(Sum('amount'))['amount__sum'] or 0)
-        #     labels.append(serialized_date)
-        #     data.append(total_spent)
+        budget = Budget.objects.get(id=budget_id)
+        transactions = Transaction.objects.filter(budget=budget)
+        categories = Category.objects.filter(user=self.request.user)
+        budgets = Budget.objects.filter(user=self.request.user)
+        today = timezone.localdate()
+        labels = []
+        data = []
+
+        labels_2 = []
+        data_2 = []
+
+        labels_3 = []
+        data_3 = []
+
+        # Queries for the line chart
+        for i in range(7):
+            date = today - timedelta(days=i)
+            serialized_date = date.isoformat()
+            total_spent = float(transactions.filter(date=date).aggregate(Sum('amount'))['amount__sum'] or 0)
+            labels.append(serialized_date)
+            data.append(total_spent)
         context['labels'] = json.dumps(labels)
         context['data'] = json.dumps(data)
+
+        # Queries for the pie chart
+        for category in categories:
+            amount = Transaction.objects.filter(
+                budget=budget,
+                category=category.budget,
+                date__gte=datetime.now() - timedelta(days=7)
+            ).aggregate(Sum('amount')).get('amount__sum') or 0
+            labels_2.append(category.name)
+            data_2.append(float(amount))
+        context['labels_2'] = json.dumps(labels_2)
+        context['data_2'] = json.dumps(data_2)
+
+        # Queries for bar chart
+        for budget in budgets:
+            amount = Transaction.objects.filter(
+                budget=budget,
+                date__gte=datetime.now() - timedelta(days=7)
+            ).aggregate(Sum('amount')).get('amount__sum') or 0
+            labels.append(budget.name)
+            data.append(float(amount))
+        context['labels_3'] = json.dumps(labels_3)
+        context['data_3'] = json.dumps(data_3)
         return context
