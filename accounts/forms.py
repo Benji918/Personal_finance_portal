@@ -31,6 +31,26 @@ class CustomUSerCreationForm(UserCreationForm):
         model = User
         fields = ['first_name', 'last_name', 'email', 'password1', 'password2']
 
+    def clean(self):
+        cleaned_data = super().clean()
+
+        # Ensure that the email is unique
+        email = cleaned_data.get('email')
+        if email and User.objects.filter(email=email).exists():
+            self.add_error('email', 'A user with this email already exists.')
+
+        # Ensure that the first name is unique
+        first_name = cleaned_data.get('first_name')
+        if first_name and User.objects.filter(first_name=first_name).exists():
+            self.add_error('first_name', 'A user with this first name already exists.')
+
+        # Ensure that the last name is unique
+        last_name = cleaned_data.get('last_name')
+        if last_name and User.objects.filter(last_name=last_name).exists():
+            self.add_error('last_name', 'A user with this last name already exists.')
+
+        return cleaned_data
+
     def save(self, commit=True):
         instance = super().save(commit=False)
         instance.username = instance.email
