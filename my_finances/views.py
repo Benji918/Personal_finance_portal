@@ -1,4 +1,5 @@
 from datetime import date, timedelta
+
 from django.contrib import messages
 from django.db.models import Sum
 from django.http import HttpResponseRedirect, JsonResponse
@@ -176,7 +177,7 @@ class BalanceDetailView(DetailView):
         return Balance.objects.filter(user=user)
 
 
-class BalanceCreatView(CreateView):
+class BalanceCreateView(CreateView):
     model = Balance
     form_class = BalanceForm
     template_name = 'my_finances/balance_income_outcome_form.html'

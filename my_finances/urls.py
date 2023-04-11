@@ -1,4 +1,5 @@
 from django.urls import path
+
 from my_finances import views
 
 app_name = 'my_finances'
@@ -20,7 +21,7 @@ urlpatterns = [
     # balance_urls
     path('balance_list/', views.BalanceListView.as_view(), name='balance_list'),
     path('balance_detail/<pk>', views.BalanceDetailView.as_view(), name='balance_detail'),
-    path('balance_create/', views.BalanceCreatView.as_view(), name='balance_create'),
+    path('balance_create/', views.BalanceCreateView.as_view(), name='balance_create'),
     path('balance_update/<pk>', views.BalanceUpdateView.as_view(), name='balance_update'),
     path('balance_delete/<pk>', views.BalanceDeleteView.as_view(), name='balance_delete'),
 

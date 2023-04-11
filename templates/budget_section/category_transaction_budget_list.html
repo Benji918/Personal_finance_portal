@@ -63,14 +63,14 @@
                             {% endif %}
                             <td>
                                 {% if list_what == 'Budget' %}
-                                    <a href="{% url 'budget_section:budget_details' object.pk %}">
-                                {% elif list_what == 'Category' %}
-                                    <a href="{% url 'budget_section:category_details' object.pk %}">
-                                {% else %}
-                                    <a href="{% url 'budget_section:transaction_details' object.pk %}">
-                                {% endif %}
-                                <i class="fas fa-search-plus"></i>
-                                </a>
+                                    <a href="{% url 'budget_section:budget_details' object.slug %}">
+                                        {% elif list_what == 'Category' %}
+                                        <a href="{% url 'budget_section:category_details' object.slug %}">
+                                            {% else %}
+                                            <a href="{% url 'budget_section:transaction_details' object.slug %}">
+                                                {% endif %}
+                                                <i class="fas fa-search-plus"></i>
+                                            </a>
                             </td>
                         </tr>
                     {% endfor %}

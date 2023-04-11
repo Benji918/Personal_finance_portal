@@ -274,10 +274,10 @@ class GetSummaryTiles(ListView):
         context = super().get_context_data(**kwargs)
 
         # Get the budget ID from the URL parameters
-        budget_id = self.kwargs['pk']
+        budget_slug = self.kwargs['slug']
 
         # Get the budget object
-        budget = Budget.objects.get(id=budget_id)
+        budget = Budget.objects.get(slug=budget_slug)
 
         # Add the budget object to the context
         context['budget'] = budget
@@ -291,6 +291,9 @@ class GetSummaryTiles(ListView):
         # Get the total budget amount
         context['total_budget'] = budget.amount
 
+        # Get budget name
+        context['budget_name'] = budget.name
+
         # Get budget start_date
         context['budget_start_date'] = budget.start_date
 
@@ -301,18 +304,13 @@ class GetSummaryTiles(ListView):
         context['budget_amount_spent'] = context['total_budget'] - context['total_spent']
 
         # Calculate the percentage spent
-        if context['total_budget'] > 0:
-            percentage_spent = round(context['budget_amount_spent'] / context['total_budget'] * 100, 2)
-            if percentage_spent == 100:
-                percentage_spent = 0
-        else:
-            percentage_spent = 0
+        percentage_spent = round(context['budget_amount_spent'] / context['total_budget'] * 100, 2)
 
         # Add the percentage spent to the context
         context['percentage_spent'] = percentage_spent
 
         # Get budget_daily_spending for line chart
-        budget = Budget.objects.get(id=budget_id)
+        budget = Budget.objects.get(slug=budget_slug)
         transactions = Transaction.objects.filter(budget=budget)
         categories = Category.objects.filter(user=self.request.user)
         budgets = Budget.objects.filter(user=self.request.user)
