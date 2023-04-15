@@ -1,5 +1,5 @@
 from datetime import date
-
+from decimal import Decimal
 from django import forms
 from django.core.exceptions import ValidationError
 
@@ -44,11 +44,15 @@ class TransactionForm(forms.ModelForm):
                 is_valid = False
         if 'amount' in self.cleaned_data:
             amount = self.cleaned_data['amount']
+            budget = self.cleaned_data['budget']
             if amount <= 0:
                 self.add_error(field='amount', error='Amount must be greater than zero')
                 is_valid = False
             elif amount != int(amount):
                 self.add_error(field='amount', error='Amount must be a whole number')
+                is_valid = False
+            elif amount > budget.amount:
+                self.add_error(field='amount', error='Amount cannot be greater than budget amount')
                 is_valid = False
         return is_valid
 

@@ -25,7 +25,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY')
+# SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = 'fdfsdjojoajsjodjojosjdojdos'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -155,10 +156,10 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = env('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
-
-# RECAPCHA
-RECAPTCHA_PUBLIC_KEY = env("RECAPTCHA_PUBLIC_KEY")
-RECAPTCHA_PRIVATE_KEY = env("RECAPTCHA_PRIVATE_KEY")
-SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
+# EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+# EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+#
+# # RECAPCHA
+# RECAPTCHA_PUBLIC_KEY = env("RECAPTCHA_PUBLIC_KEY")
+# RECAPTCHA_PRIVATE_KEY = env("RECAPTCHA_PRIVATE_KEY")
+# SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
