@@ -303,10 +303,14 @@ class GetSummaryTiles(ListView):
         # Budget amount spent
         context['budget_amount_spent'] = context['total_budget'] - context['total_spent']
 
-        # Calculate the percentage spent
-        percentage_spent = round(context['budget_amount_spent'] / context['total_budget'] * 100, 2)
+        if context['budget_amount_spent'] == 0.00:
+            percentage_spent = 0.00
+        else:
+            # Calculate the percentage spent
+            percentage_spent = 100 - round(context['budget_amount_spent'] / context['total_budget'] * 100, 2)
 
-        percentage_spent = 0 if percentage_spent == 100 else 100 - percentage_spent
+            if percentage_spent == 0:
+                percentage_spent = 100
 
         # Add the percentage spent to the context
         context['percentage_spent'] = percentage_spent
