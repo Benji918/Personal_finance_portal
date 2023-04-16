@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'accounts',
     'my_finances',
     'budget_section',
+    'savings_section',
     'crispy_forms',
     'crispy_bootstrap5',
     # 'captcha',
