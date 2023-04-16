@@ -1,10 +1,122 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base2.html' %}
+{% load static %}
 
-</body>
-</html>
+{% block content %}
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+
+            <h1>{{ list_what }} list</h1>
+
+        </div>
+    </div>
+
+    <!-- Table-->
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+
+            {% if object_list %}
+                <table id="list-table" class="table">
+                    <thead>
+                    <tr>
+                        {% if list_what == 'Savings' %}
+                        <th scope="col">Name</th>
+                        <th scope="col">Balance</th>
+                         <th scope="col">Created on</th>
+
+                        {% elif list_what == 'Deposit' %}
+                        <th scope="col">Name</th>
+                        <th scope="col">amount</th>
+                        <th scope="col">Created on</th>
+
+                        {% elif list_what == 'Withdrawal' %}
+                        <th scope="col">Name</th>
+                        <th scope="col">amount</th>
+                        <th scope="col">Created on</th>
+
+                        {% elif list_what == 'SavingsGoal' %}
+                        <th scope="col">Name</th>
+                        <th scope="col">amount</th>
+                        <th scope="col">Created on</th>
+                        {% endif %}
+                    </tr>
+                    </thead>
+                    <tbody id="table-body">
+                    {% for object in object_list %}
+                        <tr>
+                            {% if list_what == 'Savings' %}
+                            <td>{{ object.name }}</td>
+                            <td>{{ object.balance }}</td>
+                            <td>{{ object.created_at|date:"Y/m/d" }}</td>
+                            {% endif %}
+
+                            {% if list_what == 'Deposit' %}
+                                  <td>{{ object.name }}</td>
+                                  <td>{{ object.amount }}</td>
+                                  <td>{{ object.created_at|date:"Y/m/d" }}</td>
+                            {% endif %}
+
+                             {% if list_what == 'Withdrawal' %}
+                                  <td>{{ object.name }}</td>
+                                  <td>{{ object.amount }}</td>
+                                  <td>{{ object.created_at|date:"Y/m/d" }}</td>
+                            {% endif %}
+
+                            {% if list_what == 'SavingsGoal' %}
+                                  <td>{{ object.name }}</td>
+                                  <td>{{ object.amount }}</td>
+                                  <td>{{ object.created_at|date:"Y/m/d" }}</td>
+                            {% endif %}
+                            <td>
+                                {% if list_what == 'Savings' %}
+                                    <a href="{% url 'savings_section:savings_detail' object.slug %}">
+                                {% elif list_what == 'Deposit' %}
+                                    <a href="{% url 'savings_section:deposit_detail' object.slug %}">
+                                {% elif list_what == 'Withdrawal' %}
+                                    <a href="{% url 'savings_section:withdrawal_detail' object.slug %}">
+                                {% else %}
+                                    <a href="{% url 'savings_section:savings_goal_detail' object.slug %}">
+                                {% endif %}
+                                    <i class="fas fa-search-plus"></i>
+                                            </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                Nothing to show
+            {% endif %}
+
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block js %}
+    <!-- Page level plugins -->
+    <script src="{% static 'vendor/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#list-table').DataTable(
+                {
+                    order: [[0, "desc"]],
+                    columns: [
+                        {name: "Date", orderable: true},
+                        {% if list_what != 'Balance' %}
+                            {name: "End", orderable: true},
+                        {% endif %}
+                        {name: "Type", orderable: true},
+                        {name: "Value", orderable: true},
+                        {% if list_what != 'Balance' %}
+                            {name: "Repetition", orderable: true},
+                        {% endif %}
+                        {name: "Comment", orderable: true},
+                        {name: "Details", orderable: false},
+                    ]
+                }
+            );
+        })
+    </script>
+{% endblock %}

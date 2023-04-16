@@ -13,13 +13,13 @@ from .forms import SavingsGoalForm, WithdrawalForm, DepositForm, SavingsAccountF
 @method_decorator(login_required, name='dispatch')
 class SavingsAccountListView(ListView):
     model = SavingsAccount
-    template_name = 'savings_section/savings_section_list'
+    template_name = 'savings_section/savings_section_list.html'
     paginate_by = 100
     extra_context = {'list_what': 'Savings'}
 
     def get_queryset(self):
         user = self.request.user
-        return SavingsAccount.objects.filter(user=user).order_by('-id')
+        return SavingsAccount.objects.filter(user_holder=user).order_by('-id')
 
 
 @method_decorator(login_required, name='dispatch')
@@ -36,7 +36,7 @@ class SavingsAccountCreateView(CreateView):
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
-        messages.success(self.request, 'Savings account created successfully!')
+        messages.success(self.request, 'Savings user created successfully!')
         return reverse_lazy('savings_section:savings_list')
 
 
@@ -54,7 +54,7 @@ class SavingsAccountUpdateView(UpdateView):
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
-        messages.success(self.request, 'Savings account updated successfully!')
+        messages.success(self.request, 'Savings user updated successfully!')
         return reverse_lazy('savings_section:savings_list')
 
 
@@ -80,20 +80,20 @@ class SavingsAccountDeleteView(DeleteView):
         return SavingsAccount.objects.filter(user=user)
 
     def get_success_url(self):
-        messages.success(self.request, 'Savings account deleted successfully!')
+        messages.success(self.request, 'Savings user deleted successfully!')
         return reverse_lazy('savings_section:savings:list')
 
 
 @method_decorator(login_required, name='dispatch')
 class DepositListView(ListView):
     model = Deposit
-    template_name = 'savings_section/savings_section_list'
+    template_name = 'savings_section/savings_section_list.html'
     paginate_by = 100
     extra_context = {'list_what': 'Deposit'}
 
     def get_queryset(self):
         user = self.request.user
-        return Deposit.objects.filter(account=user).order_by('-id')
+        return Deposit.objects.filter(user=user).order_by('-id')
 
 
 @method_decorator(login_required, name='dispatch')
@@ -140,7 +140,7 @@ class DepositDetailView(DetailView):
 
     def get_queryset(self):
         user = self.request.user
-        return Deposit.objects.filter(account=user).order_by('-id')
+        return Deposit.objects.filter(user=user).order_by('-id')
 
 
 @method_decorator(login_required, name='dispatch')
@@ -151,7 +151,7 @@ class DepositDeleteView(DeleteView):
 
     def get_queryset(self):
         user = self.request.user
-        return Deposit.objects.filter(account=user)
+        return Deposit.objects.filter(user=user)
 
     def get_success_url(self):
         messages.success(self.request, 'Deposit deleted successfully!')
@@ -161,13 +161,13 @@ class DepositDeleteView(DeleteView):
 @method_decorator(login_required, name='dispatch')
 class WithdrawalListView(ListView):
     model = Withdrawal
-    template_name = 'savings_section/savings_section_list'
+    template_name = 'savings_section/savings_section_list.html'
     paginate_by = 100
     extra_context = {'list_what': 'Withdrawal'}
 
     def get_queryset(self):
         user = self.request.user
-        return Withdrawal.objects.filter(account=user).order_by('-id')
+        return Withdrawal.objects.filter(user=user).order_by('-id')
 
 
 @method_decorator(login_required, name='dispatch')
@@ -214,7 +214,7 @@ class WithdrawalDetailView(DetailView):
 
     def get_queryset(self):
         user = self.request.user
-        return Withdrawal.objects.filter(account=user).order_by('-id')
+        return Withdrawal.objects.filter(user=user).order_by('-id')
 
 
 @method_decorator(login_required, name='dispatch')
@@ -225,7 +225,7 @@ class WithdrawalDeleteView(DeleteView):
 
     def get_queryset(self):
         user = self.request.user
-        return Withdrawal.objects.filter(account=user)
+        return Withdrawal.objects.filter(user=user)
 
     def get_success_url(self):
         messages.success(self.request, 'Withdrawal deleted successfully!')
@@ -235,13 +235,13 @@ class WithdrawalDeleteView(DeleteView):
 @method_decorator(login_required, name='dispatch')
 class SavingsGoalListView(ListView):
     model = SavingsGoal
-    template_name = 'savings_section/savings_section_list'
+    template_name = 'savings_section/savings_section_list.html'
     paginate_by = 100
     extra_context = {'list_what': 'SavingsGoal'}
 
     def get_queryset(self):
         user = self.request.user
-        return SavingsGoal.objects.filter(account=user).order_by('-id')
+        return SavingsGoal.objects.filter(user=user).order_by('-id')
 
 
 @method_decorator(login_required, name='dispatch')
@@ -259,7 +259,7 @@ class SavingsGoalCreateView(CreateView):
 
     def get_success_url(self):
         messages.success(self.request, 'SavingsGoal created successfully!')
-        return reverse_lazy('savings_section:savings_goal_list')
+        return reverse_lazy('savings_section:savings_goals_list')
 
 
 @method_decorator(login_required, name='dispatch')
@@ -277,18 +277,18 @@ class SavingsGoalUpdateView(UpdateView):
 
     def get_success_url(self):
         messages.success(self.request, 'SavingsGoal updated successfully!')
-        return reverse_lazy('savings_section:savings_goal_list')
+        return reverse_lazy('savings_section:savings_goals_list')
 
 
 @method_decorator(login_required, name='dispatch')
-class WithdrawalDetailView(DetailView):
+class SavingsGoalDetailView(DetailView):
     model = SavingsGoal
     template_name = 'savings_section/savings_section_detail.html'
     extra_context = {'detail_what': 'SavingsGoal'}
 
     def get_queryset(self):
         user = self.request.user
-        return SavingsGoal.objects.filter(account=user).order_by('-id')
+        return SavingsGoal.objects.filter(user=user).order_by('-id')
 
 
 @method_decorator(login_required, name='dispatch')
@@ -299,8 +299,8 @@ class SavingsGoalDeleteView(DeleteView):
 
     def get_queryset(self):
         user = self.request.user
-        return SavingsGoal.objects.filter(account=user)
+        return SavingsGoal.objects.filter(user=user)
 
     def get_success_url(self):
         messages.success(self.request, 'SavingsGoal deleted successfully!')
-        return reverse_lazy('savings_section:savings_goal:list')
+        return reverse_lazy('savings_section:savings_goals:list')
