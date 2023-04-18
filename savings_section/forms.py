@@ -28,7 +28,7 @@ class SavingsAccountForm(forms.ModelForm):
 
     class Meta:
         model = SavingsAccount
-        fields = ['name', 'balance']
+        fields = ['name', 'balance', 'description']
 
 
 class DepositForm(forms.ModelForm):
@@ -52,7 +52,7 @@ class DepositForm(forms.ModelForm):
 
     class Meta:
         model = Deposit
-        fields = ['name', 'amount']
+        fields = ['name', 'amount', 'description']
 
 
 class WithdrawalForm(forms.ModelForm):
@@ -76,7 +76,7 @@ class WithdrawalForm(forms.ModelForm):
 
     class Meta:
         model = Withdrawal
-        fields = ['name', 'amount']
+        fields = ['name', 'amount', 'description']
 
 
 class SavingsGoalForm(forms.ModelForm):
@@ -100,4 +100,4 @@ class SavingsGoalForm(forms.ModelForm):
 
     class Meta:
         model = SavingsGoal
-        fields = ['name', 'amount']
+        fields = ['name', 'amount', 'description']

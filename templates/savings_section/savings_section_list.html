@@ -46,24 +46,28 @@
                             {% if list_what == 'Savings' %}
                             <td>{{ object.name }}</td>
                             <td>{{ object.balance }}</td>
+                            <td>{{ object.description }}</td>
                             <td>{{ object.created_at|date:"Y/m/d" }}</td>
                             {% endif %}
 
                             {% if list_what == 'Deposit' %}
                                   <td>{{ object.name }}</td>
                                   <td>{{ object.amount }}</td>
+                                  <td>{{ object.description }}</td>
                                   <td>{{ object.created_at|date:"Y/m/d" }}</td>
                             {% endif %}
 
                              {% if list_what == 'Withdrawal' %}
                                   <td>{{ object.name }}</td>
                                   <td>{{ object.amount }}</td>
+                                    <td>{{ object.description }}</td>
                                   <td>{{ object.created_at|date:"Y/m/d" }}</td>
                             {% endif %}
 
                             {% if list_what == 'SavingsGoal' %}
                                   <td>{{ object.name }}</td>
                                   <td>{{ object.amount }}</td>
+                                    <td>{{ object.description }}</td>
                                   <td>{{ object.created_at|date:"Y/m/d" }}</td>
                             {% endif %}
                             <td>
