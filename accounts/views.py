@@ -50,7 +50,7 @@ def login_view(request):
         remember_me = request.POST.get('remember_me')
         user = authenticate(request, username=username, password=password)
         try:
-            if user:
+            if user and user.is_active:
                 login(request, user=user)
                 messages.success(request, message=f'{user.email} successfully logged in!')
                 if not remember_me:

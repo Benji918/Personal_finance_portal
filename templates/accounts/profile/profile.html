@@ -1,38 +1,92 @@
-{% extends 'accounts/profile/base.html' %}
-
+{% extends 'base2.html' %}
+{% load crispy_forms_tags %}
 {% block content %}
 
 
-<div class="center">
-	<form method="POST" enctype="multipart/form-data" class="card">
-		{% csrf_token %}
+<!--<div class="center">-->
+<!--	<form method="POST" enctype="multipart/form-data" class="card">-->
+<!--		{% csrf_token %}-->
 
-	    {% if user.profile %}
-			<img src="{{user.profile.avatar.url}}" alt="{{ user.username }}" class="avatar"  accept=".jpg,.jpeg,.png"/>
-	    {% endif %}
+<!--	    {% if user.profile %}-->
+<!--			<img src="{{user.profile.avatar.url}}" alt="{{ user.username }}" class="avatar"  accept=".jpg,.jpeg,.png"/>-->
+<!--	    {% endif %}-->
 
-	    <h2 class="text-center">{{ user.username | title }}</h2>
-	    <p class="text-center"><a href="mailto:{{user.email}}">{{user.email}}</a></p>
-		<hr>
+<!--	    <h2 class="text-center">{{ user.username | title }}</h2>-->
+<!--	    <p class="text-center"><a href="mailto:{{user.email}}">{{user.email}}</a></p>-->
+<!--		<hr>-->
 
-		<label for="email">Username:</label>
-		<input type="text" id="username" name="username" value="{{user.username}}" />
+<!--		<label for="email">Username:</label>-->
+<!--		<input type="text" id="username" name="username" value="{{user.username}}" />-->
 
-		<label for="email">Email Address:</label>
-		<input type="email" id="email" name="email" value="{{user.email}}" />
+<!--		<label for="email">Email Address:</label>-->
+<!--		<input type="email" id="email" name="email" value="{{user.email}}" />-->
 
 
-		<label for="avatar">Avatar:</label>
-		<input type="file" name="avatar" id="avatar" value=" {{ user.profile.avatar }}">
+<!--		<label for="avatar">Avatar:</label>-->
+<!--		<input type="file" name="avatar" id="avatar" value=" {{ user.profile.avatar }}">-->
 
-		<label for="bio">Bio:</label>
-		<textarea id="bio" name="bio" rows="5" value="{{user.profile.bio}}">
-			{{user.profile.bio}}
-		</textarea>
+<!--		<label for="bio">Bio:</label>-->
+<!--		<textarea id="bio" name="bio" rows="5" value="{{user.profile.bio}}">-->
+<!--			{{user.profile.bio}}-->
+<!--		</textarea>-->
 
-	    <button type="submit" class="btn btn-primary full-width">Update Profile</button>
+<!--	    <button type="submit" class="btn btn-primary full-width">Update Profile</button>-->
 
-	</form>
-</div>
+<!--	</form>-->
+<!--</div>-->
+
+ <!-- Outer Row -->
+    <div class="row justify-content-center">
+
+        <div class="col-xl-10 col-lg-12 col-md-9">
+
+            <div class="card o-hidden border-0 shadow-lg my-5">
+                <div class="card-body p-0">
+                    <!-- Nested Row within Card Body -->
+                    <div class="row">
+                        <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
+                        <div class="col-lg-6">
+                            <div class="p-5">
+                                <div class="text-center">
+                                    <h1 class="h4 text-gray-900 mb-4"><b>User Profile</b></h1>
+                                </div>
+                                <form class="user" method="POST" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <label for="username">Username</label>
+                                        <input type="username" class="form-control form-control-user"
+                                               id="username" name="username" value="{{user.username}}"
+                                              >
+                                    </div>
+									<div class="form-group">
+                                        <label for="email">Email</label>
+                                        <input type="email" class="form-control form-control-user"
+                                               id="email" name="username" aria-describedby="emailHelp"
+                                               value="{{user.email}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="avatar">Avatar</label>
+										<input type="file" name="avatar" id="avatar" value=" {{ user.profile.avatar }}">
+                                    </div>
+
+									<div class="form-group">
+									<label for="bio">Bio:</label>
+									<textarea id="bio" name="bio" class="form-control form-control-user" rows="5" value="{{user.profile.bio}}">
+										{{user.profile.bio}}
+									</textarea>
+									</div>
+                                    <button type="submit" class="btn btn-primary btn-user btn-block">
+                                        Update Profile
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
 
 {% endblock content %}
