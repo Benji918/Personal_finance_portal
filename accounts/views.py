@@ -135,7 +135,7 @@ def password_change(request):
                 messages.error(request, error)
 
     form = Set_Password_Form(user)
-    return render(request, 'accounts/password_reset_confirm.html', {'form': form})
+    return render(request, 'accounts/password-reset/password_reset_confirm.html', {'form': form})
 
 
 def password_reset_request(request):
@@ -160,14 +160,11 @@ def password_reset_request(request):
                 if email:
                     messages.success(request,
                                      mark_safe(
-                                         """
-                                     <h2>Password reset sent</h2><hr>
-                                     <p>
-                                         We've emailed you instructions for setting your password, if an account exists with the email you entered. 
-                                         You should receive them shortly.<br>If you don't receive an email, please make sure you've entered the address 
-                                         you registered with, and check your spam folder.
-                                     </p>
-                                     """
+                                         """<h2>Password reset sent</h2><hr> <p> We've emailed you instructions for 
+                                         setting your password, if an account exists with the email you entered. You 
+                                         should receive them shortly.<br>If you don't receive an email, please make 
+                                         sure you've entered the address you registered with, and check your spam 
+                                         folder. </p>"""
                                      ))
                     messages.success(request, "Email Sent Successfully. Check your inbox!")
                     return redirect('website:index')
@@ -201,7 +198,8 @@ def passwordResetConfirm(request, uidb64, token):
             form = Set_Password_Form(user, request.POST)
             if form.is_valid():
                 form.save()
-                messages.success(request, "Your password has been set. You may go ahead and <b>log in </b> now.")
+                messages.success(request, mark_safe("Your password has been set. You may go ahead and <b>log in </b> "
+                                                    "now."))
                 return redirect('website:index')
             else:
                 for error in list(form.errors.values()):
