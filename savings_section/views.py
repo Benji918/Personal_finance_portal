@@ -1,4 +1,4 @@
-from django.core.checks import messages
+from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
@@ -19,7 +19,7 @@ class SavingsAccountListView(ListView):
 
     def get_queryset(self):
         user = self.request.user
-        return SavingsAccount.objects.filter(user_holder=user).order_by('-id')
+        return SavingsAccount.objects.filter(account_holder=user).order_by('-id')
 
 
 @method_decorator(login_required, name='dispatch')

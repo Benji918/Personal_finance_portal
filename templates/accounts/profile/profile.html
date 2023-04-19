@@ -53,9 +53,15 @@
                                 <form class="user" method="POST" enctype="multipart/form-data">
                                     {% csrf_token %}
                                     <div class="form-group">
-                                        <label for="username">Username</label>
+                                        <label for="username">First name</label>
                                         <input type="username" class="form-control form-control-user"
-                                               id="username" name="username" value="{{user.username}}"
+                                               id="username" name="username" value="{{user.first_name}}"
+                                              >
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="username">Last name</label>
+                                        <input type="username" class="form-control form-control-user"
+                                               id="username" name="username" value="{{user.last_name}}"
                                               >
                                     </div>
 									<div class="form-group">
