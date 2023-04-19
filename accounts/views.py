@@ -32,7 +32,7 @@ def register(request):
             user = form.save(commit=False)
             user.save()
             # Send activation email
-            # send_activation_email(request, user)
+            send_activation_email(request, user)
             return redirect('accounts:login')
     context = {'form': form}
     return render(request, 'accounts/register.html', context)
@@ -159,7 +159,8 @@ def password_reset_request(request):
                                   recipient_list=[associated_user.email])
                 if email:
                     messages.success(request,
-                                     """
+                                     mark_safe(
+                                         """
                                      <h2>Password reset sent</h2><hr>
                                      <p>
                                          We've emailed you instructions for setting your password, if an account exists with the email you entered. 
@@ -167,11 +168,11 @@ def password_reset_request(request):
                                          you registered with, and check your spam folder.
                                      </p>
                                      """
-                                     )
+                                     ))
                     messages.success(request, "Email Sent Successfully. Check your inbox!")
                     return redirect('website:index')
                 else:
-                    messages.error(request, "Problem sending reset password email, <b>SERVER PROBLEM</b>")
+                    messages.error(request, mark_safe("Problem sending reset password email, <b>SERVER PROBLEM</b>"))
 
             else:
                 messages.error(request, "Invalid email address. Try again!")
@@ -248,7 +249,9 @@ def send_activation_email(request, user):
         subject, message, to=[user.email]
     )
     if email.send():
-        messages.success(request, f'Dear <b>{user}</b>, please go to you email <b>{user.email}</b> inbox and click on \
-                received activation link to confirm and complete the registration. <b>Note:</b> Check your spam folder.')
+        messages.success(request, mark_safe(f'Dear <b>{user}</b>, please go to you email <b>{user.email}</b> inbox '
+                                            f'and click on received activation link to confirm and complete the '
+                                            f'registration. <b>Note:</b> Check your spam folder.'))
     else:
-        messages.error(request, f'Problem sending confirmation email to {user.email}, check if you typed it correctly.')
+        messages.error(request, mark_safe(f'Problem sending confirmation email to {user.email}, check if you typed it '
+                                          f'correctly.'))
