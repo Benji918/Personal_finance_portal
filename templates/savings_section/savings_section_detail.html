@@ -1,10 +1,58 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base2.html' %}
+{% block content %}
+<div class="row">
 
-</body>
-</html>
+    <div class="col-lg-8 mx-auto">
+        <h1>{{detail_what}} {{object.slug}}</h1>
+        <ul>
+            {% if detail_what == 'Savings' %}
+                <li>{{ object.name }}</li>
+                <li>{{ object.balance }}</li>
+                <li>{{ object.description }}</li>
+                <li>{{ object.created_at|date:"Y/m/d" }}</li>
+            {% endif %}
+            
+            {% if detail_what == 'Deposit' %}
+              <li>{{ object.name }}</li>
+              <li>{{ object.amount }}</li>
+              <li>{{ object.description }}</li>
+              <li>{{ object.created_at|date:"Y/m/d" }}</li>
+            {% endif %}
+
+             {% if detail_what == 'Withdrawal' %}
+              <li>{{ object.name }}</li>
+              <li>{{ object.amount }}</li>
+              <li>{{ object.description }}</li>
+              <li>{{ object.created_at|date:"Y/m/d" }}</li>
+            {% endif %}
+
+            {% if detail_what == 'SavingsGoal' %}
+              <li>{{ object.name }}</li>
+              <li>{{ object.amount }}</li>
+              <li>{{ object.description }}</li>
+              <li>{{ object.created_at|date:"Y/m/d" }}</li>
+            {% endif %}
+            
+        </ul>
+        {% if detail_what == 'Savings' %}
+        <a href="{% url 'savings_section:savings_update' object.slug %}">Update</a>
+        <a href="{% url 'savings_section:savings_delete' object.slug %}">Delete</a>
+        <a href="{% url 'savings_section:savings_summary' object.slug %}">View Dashboard</a>
+        {% elif detail_what == 'Deposit' %}
+         <a href="{% url 'savings_section:deposit_update' object.slug %}">Update</a>
+        <a href="{% url 'savings_section:deposit_delete' object.slug %}">Delete</a>
+        <a href="{% url 'savings_section:deposit_summary' object.slug %}">View Dashboard</a>
+        {% elif details_what == 'Withdrawal' %}
+         <a href="{% url 'savings_section:withdrawal_update' object.slug %}">Update</a>
+        <a href="{% url 'savings_section:withdrawal_delete' object.slug %}">Delete</a>
+        <a href="{% url 'savings_section:withdrawal_summary' object.slug %}">View Dashboard</a>
+        {% elif detail_what == 'SavingsGoal' %}
+         <a href="{% url 'savings_section:savings_goal_update' object.slug %}">Update</a>
+        <a href="{% url 'savings_section:savings_goal_delete' object.slug %}">Delete</a>
+        <a href="{% url 'savings_section:savings_goal_summary' object.slug %}">View Dashboard</a>
+        {% endif %}
+
+
+    </div>
+</div>
+{% endblock %}
