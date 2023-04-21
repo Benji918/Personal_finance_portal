@@ -9,7 +9,7 @@ from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.decorators import method_decorator
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView, TemplateView
 
 from .forms import CategoryForm, TransactionForm, BudgetForm
 from .models import Category, Transaction, Budget
@@ -239,8 +239,7 @@ class TransactionDeleteView(DeleteView):
 
 
 @method_decorator(login_required, name='dispatch')
-class GetSummaryTiles(ListView):
-    model = Budget
+class GetSummaryTiles(TemplateView):
     template_name = 'budget_section/current_period.html'
     context_object_name = 'budget_data'
 

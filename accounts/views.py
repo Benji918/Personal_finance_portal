@@ -59,7 +59,9 @@ def login_view(request):
                 return redirect('website:index')
 
             else:
-                messages.error(request, 'Your account is inactive.')
+                messages.error(request, 'Your account is inactive. Click on the activation link in your inbox to '
+                                        'activate your'
+                                        'account!')
         else:
             messages.error(request, 'Invalid username or password. Check your credentials!')
     return render(request, 'accounts/login.html')

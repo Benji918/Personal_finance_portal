@@ -128,6 +128,11 @@ JAZZMIN_UI_TWEAKS = {
     "dark_mode_theme": "darkly",
 }
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'accounts.backends.EmailBackend',
+]
+
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 

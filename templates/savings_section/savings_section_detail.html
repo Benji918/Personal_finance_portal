@@ -41,15 +41,12 @@
         {% elif detail_what == 'Deposit' %}
          <a href="{% url 'savings_section:deposit_update' object.slug %}">Update</a>
         <a href="{% url 'savings_section:deposit_delete' object.slug %}">Delete</a>
-        <a href="{% url 'savings_section:deposit_summary' object.slug %}">View Dashboard</a>
         {% elif details_what == 'Withdrawal' %}
          <a href="{% url 'savings_section:withdrawal_update' object.slug %}">Update</a>
         <a href="{% url 'savings_section:withdrawal_delete' object.slug %}">Delete</a>
-        <a href="{% url 'savings_section:withdrawal_summary' object.slug %}">View Dashboard</a>
         {% elif detail_what == 'SavingsGoal' %}
          <a href="{% url 'savings_section:savings_goal_update' object.slug %}">Update</a>
         <a href="{% url 'savings_section:savings_goal_delete' object.slug %}">Delete</a>
-        <a href="{% url 'savings_section:savings_goal_summary' object.slug %}">View Dashboard</a>
         {% endif %}
 
 

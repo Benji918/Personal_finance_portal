@@ -41,8 +41,5 @@ urlpatterns = [
 
     # DASHBOARD URLS
     path('savings_accounts/current_period/<slug:slug>', SavingsAccountSummaryTiles.as_view(), name='savings_summary'),
-    path('deposit/current_period/<slug:slug>', DepositSummaryTiles.as_view(), name='deposit_summary'),
-    path('withdrawal/current_period/<slug:slug>', WithdrawalSummaryTiles.as_view(), name='withdrawal_summary'),
-    path('savings_goal/current_period/<slug:slug>', SavingsGoalSummaryTiles.as_view(), name='savings_goal_summary'),
 
 ]

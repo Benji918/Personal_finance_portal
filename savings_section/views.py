@@ -1,8 +1,9 @@
 from django.contrib import messages
+from django.db.models import Count, Sum
 from django.http import HttpResponseRedirect
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView, TemplateView
 from django.urls import reverse_lazy
 from .models import SavingsAccount, Deposit, Withdrawal, SavingsGoal
 from .forms import SavingsGoalForm, WithdrawalForm, DepositForm, SavingsAccountForm
@@ -19,7 +20,7 @@ class SavingsAccountListView(ListView):
 
     def get_queryset(self):
         user = self.request.user
-        return SavingsAccount.objects.filter(account_holder=user).order_by('-id')
+        return SavingsAccount.objects.filter(user=user).order_by('-id')
 
 
 @method_decorator(login_required, name='dispatch')
@@ -81,11 +82,61 @@ class SavingsAccountDeleteView(DeleteView):
 
     def get_success_url(self):
         messages.success(self.request, 'Savings user deleted successfully!')
-        return reverse_lazy('savings_section:savings:list')
+        return reverse_lazy('savings_section:savings_list')
+
 
 @method_decorator(login_required, name='dispatch')
-class SavingsAccountSummaryTiles(ListView):
-    pass
+class SavingsAccountSummaryTiles(TemplateView):
+    template_name = 'savings_section/current_period.html'
+    extra_context = {'display_what': 'Savings'}
+    context_object_name = 'savings_data'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data()
+
+        # Get the savings slug from the URL parameters
+        savings_slug = self.kwargs['slug']
+
+        # Get savings object from slug
+        savings_object = SavingsAccount.objects.get(slug=savings_slug)
+
+        # Add the budget object to the context
+        context['savings'] = savings_object
+
+        # Savings name
+        context['savings_name'] = savings_object.name
+
+        # Savings balance
+        context['savings_balance'] = savings_object.balance
+
+        # Calculate the total deposits made to the SavingsAccount
+        total_deposits = savings_object.deposit_set.aggregate(total_deposits=Sum('amount'))['total_deposits'] or 0
+
+        # Calculate the total withdrawals made from the SavingsAccount
+        total_withdrawals = savings_object.withdrawal_set.aggregate(total_withdrawals=Sum('amount'))[
+                                'total_withdrawals'] or 0
+
+        # Calculate the number of deposits made to the SavingsAccount
+        num_deposits = savings_object.deposit_set.aggregate(num_deposits=Count('id'))['num_deposits'] or 0
+
+        # Calculate the number of withdrawals made from the SavingsAccount
+        num_withdrawals = savings_object.withdrawal_set.aggregate(num_withdrawals=Count('id'))['num_withdrawals'] or 0
+
+        # Calculate the current balance of the SavingsAccount
+        current_balance = savings_object.balance + total_deposits - total_withdrawals
+
+        context['total_deposits'] = total_deposits
+        context['total_withdrawals'] = total_withdrawals
+        context['num_deposits'] = num_deposits
+        context['num_withdrawals'] = num_withdrawals
+        context['current_balance'] = current_balance
+
+        return context
+
+
+
+
+
 
 
 @method_decorator(login_required, name='dispatch')
@@ -160,6 +211,7 @@ class DepositDeleteView(DeleteView):
     def get_success_url(self):
         messages.success(self.request, 'Deposit deleted successfully!')
         return reverse_lazy('savings_section:deposits:list')
+
 
 @method_decorator(login_required, name='dispatch')
 class DepositSummaryTiles(ListView):
@@ -317,6 +369,7 @@ class SavingsGoalDeleteView(DeleteView):
     def get_success_url(self):
         messages.success(self.request, 'SavingsGoal deleted successfully!')
         return reverse_lazy('savings_section:savings_goals_list')
+
 
 @method_decorator(login_required, name='dispatch')
 class SavingsGoalSummaryTiles(ListView):
