@@ -83,6 +83,10 @@ class SavingsAccountDeleteView(DeleteView):
         messages.success(self.request, 'Savings user deleted successfully!')
         return reverse_lazy('savings_section:savings:list')
 
+@method_decorator(login_required, name='dispatch')
+class SavingsAccountSummaryTiles(ListView):
+    pass
+
 
 @method_decorator(login_required, name='dispatch')
 class DepositListView(ListView):
@@ -136,7 +140,7 @@ class DepositUpdateView(UpdateView):
 class DepositDetailView(DetailView):
     model = Deposit
     template_name = 'savings_section/savings_section_delete.html'
-    extra_context = {'delete_what': 'Deposit'}
+    extra_context = {'detail_what': 'Deposit'}
 
     def get_queryset(self):
         user = self.request.user
@@ -156,6 +160,10 @@ class DepositDeleteView(DeleteView):
     def get_success_url(self):
         messages.success(self.request, 'Deposit deleted successfully!')
         return reverse_lazy('savings_section:deposits:list')
+
+@method_decorator(login_required, name='dispatch')
+class DepositSummaryTiles(ListView):
+    pass
 
 
 @method_decorator(login_required, name='dispatch')
@@ -233,6 +241,11 @@ class WithdrawalDeleteView(DeleteView):
 
 
 @method_decorator(login_required, name='dispatch')
+class WithdrawalSummaryTiles(ListView):
+    pass
+
+
+@method_decorator(login_required, name='dispatch')
 class SavingsGoalListView(ListView):
     model = SavingsGoal
     template_name = 'savings_section/savings_section_list.html'
@@ -303,4 +316,8 @@ class SavingsGoalDeleteView(DeleteView):
 
     def get_success_url(self):
         messages.success(self.request, 'SavingsGoal deleted successfully!')
-        return reverse_lazy('savings_section:savings_goals:list')
+        return reverse_lazy('savings_section:savings_goals_list')
+
+@method_decorator(login_required, name='dispatch')
+class SavingsGoalSummaryTiles(ListView):
+    pass
