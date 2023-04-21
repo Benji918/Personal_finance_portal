@@ -1,5 +1,9 @@
+import datetime
+import json
+
 from django.contrib import messages
 from django.db.models import Count, Sum
+from django.db.models.functions import Trunc
 from django.http import HttpResponseRedirect
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
@@ -109,6 +113,13 @@ class SavingsAccountSummaryTiles(TemplateView):
         # Savings balance
         context['savings_balance'] = savings_object.balance
 
+        # Get savings goal amount
+        savings_goal_object = SavingsGoal.objects.get(savings=savings_object)
+
+        context['savings_goal'] = savings_goal_object
+
+        context['savings_goal_amount'] = savings_goal_object.amount
+
         # Calculate the total deposits made to the SavingsAccount
         total_deposits = savings_object.deposit_set.aggregate(total_deposits=Sum('amount'))['total_deposits'] or 0
 
@@ -125,18 +136,43 @@ class SavingsAccountSummaryTiles(TemplateView):
         # Calculate the current balance of the SavingsAccount
         current_balance = savings_object.balance + total_deposits - total_withdrawals
 
+        # Amount diff btw the savings account and the savings goal
+        diff = savings_goal_object.amount - current_balance
+
+        # Calculate the percentage left to reach savings goal
+        percentage_left = round(diff / savings_goal_object.amount * 100, 2)
+
+        # Get deposit_withdrawal_history
+        deposits = Deposit.objects.filter(savings=savings_object).annotate(
+            timestamp=Trunc('created_at', 'month')).values('created_at').annotate(total_amount=Sum('amount')).order_by(
+            'created_at')
+        withdrawals = Withdrawal.objects.filter(savings=savings_object).annotate(
+            timestamp=Trunc('created_at', 'month')).values('created_at').annotate(total_amount=Sum('amount')).order_by(
+            'created_at')
+        print(deposits)
+        labels = []
+        deposit_data = []
+        withdrawal_data = []
+        for deposit in deposits:
+            labels.append(deposit['created_at'].strftime('%B %Y'))
+            deposit_data.append(float(deposit['total_amount']))
+        for withdrawal in withdrawals:
+            labels.append(withdrawal['created_at'].strftime('%B %Y'))
+            withdrawal_data.append(float(withdrawal['total_amount']))
+
+        context['labels'] = json.dumps(labels)
+        context['deposit_data'] = json.dumps(deposit_data)
+        context['withdrawal_data'] = json.dumps(withdrawal_data)
+        context['percentage_left'] = percentage_left
+        context['today'] = datetime.datetime.today()
         context['total_deposits'] = total_deposits
         context['total_withdrawals'] = total_withdrawals
+        context['total_savings_transactions'] = num_deposits + num_withdrawals
         context['num_deposits'] = num_deposits
         context['num_withdrawals'] = num_withdrawals
         context['current_balance'] = current_balance
 
         return context
-
-
-
-
-
 
 
 @method_decorator(login_required, name='dispatch')
