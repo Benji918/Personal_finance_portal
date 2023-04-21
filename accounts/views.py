@@ -30,6 +30,7 @@ def register(request):
         if form.is_valid():
             # save form in the memory not in database
             user = form.save(commit=False)
+            user.is_active = False
             user.save()
             # Send activation email
             send_activation_email(request, user)
@@ -45,21 +46,22 @@ def login_view(request):
                                          f'log out here.</a>'))
         return redirect('website:index')
     if request.method == 'POST':
-        username = request.POST.get('username')
+        email = request.POST.get('email')
         password = request.POST.get('password')
         remember_me = request.POST.get('remember_me')
-        user = authenticate(request, username=username, password=password)
-        try:
-            if user and user.is_active:
+        user = authenticate(request, username=email, password=password)
+        if user is not None:
+            if user.is_active:
                 login(request, user=user)
-                messages.success(request, message=f'{user.email} successfully logged in!')
                 if not remember_me:
                     request.session.set_expiry(0)
+                messages.success(request, message=f'{user.email} successfully logged in!')
                 return redirect('website:index')
-        except TypeError:
-            messages.warning(request, 'Activate your account before logging in!.')
+
+            else:
+                messages.error(request, 'Your account is inactive.')
         else:
-            messages.warning(request, 'Could not authenticate, check credentials.')
+            messages.error(request, 'Invalid username or password. Check your credentials!')
     return render(request, 'accounts/login.html')
 
 
