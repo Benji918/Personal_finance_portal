@@ -20,6 +20,7 @@ from django.views import View
 from accounts.forms import CustomUSerCreationForm, UserUpdateForm, ProfileUpdateForm
 from .forms import Set_Password_Form, Password_Reset_Form
 from .tokens import account_activation_token
+from .send_activation_email import send_activation_email
 
 
 # Create your views here.
@@ -237,23 +238,3 @@ def activate(request, uidb64, token):
     return redirect('website:index')
 
 
-def send_activation_email(request, user):
-    current_site = get_current_site(request)
-    subject = 'Activate Your Account'
-    message = render_to_string('accounts/account_activation_email.html', {
-        'user': user,
-        'domain': current_site.domain,
-        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-        'token': account_activation_token.make_token(user),
-        'protocol': 'https' if request.is_secure() else 'http'
-    })
-    email = EmailMessage(
-        subject, message, to=[user.email]
-    )
-    if email.send():
-        messages.success(request, mark_safe(f'Dear <b>{user}</b>, please go to you email <b>{user.email}</b> inbox '
-                                            f'and click on received activation link to confirm and complete the '
-                                            f'registration. <b>Note:</b> Check your spam folder.'))
-    else:
-        messages.error(request, mark_safe(f'Problem sending confirmation email to {user.email}, check if you typed it '
-                                          f'correctly.'))
