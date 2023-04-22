@@ -2,9 +2,11 @@ from django import forms
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.forms import SetPasswordForm
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
+from phonenumber_field.formfields import PhoneNumberField
+from phonenumber_field.widgets import PhoneNumberPrefixWidget
+from django.utils.translation import gettext_lazy as _
 
-from .models import Profile
+from .models import Profile, CustomUser
 
 
 # from captcha.fields import ReCaptchaField
@@ -20,6 +22,10 @@ class CustomUSerCreationForm(UserCreationForm):
     email = forms.Field(widget=forms.EmailInput(attrs={
         'class': 'form-control form-control-user', 'placeholder': 'Email'
     }))
+    phone_number = PhoneNumberField(widget=PhoneNumberPrefixWidget(attrs={
+        # 'class': 'form-control form-control-user',
+        'placeholder': 'Phone number',
+    }))
     password1 = forms.Field(widget=forms.PasswordInput(attrs={
         'class': 'form-control form-control-user', 'placeholder': 'Password'
     }), label='Password')
@@ -28,28 +34,36 @@ class CustomUSerCreationForm(UserCreationForm):
     }), label='Confirm password')
 
     class Meta:
-        model = User
-        fields = ['first_name', 'last_name', 'email', 'password1', 'password2']
+        model = CustomUser
+        fields = ['first_name', 'last_name', 'email', 'phone_number', 'password1', 'password2']
 
     def clean(self):
         cleaned_data = super().clean()
 
         # Ensure that the email is unique
         email = cleaned_data.get('email')
-        if email and User.objects.filter(email=email).exists():
+        if email and CustomUser.objects.filter(email=email).exists():
             self.add_error('email', 'A user with this email already exists.')
 
         # Ensure that the first name is unique
         first_name = cleaned_data.get('first_name')
-        if first_name and User.objects.filter(first_name=first_name).exists():
+        if first_name and CustomUser.objects.filter(first_name=first_name).exists():
             self.add_error('first_name', 'A user with this first name already exists.')
 
         # Ensure that the last name is unique
         last_name = cleaned_data.get('last_name')
-        if last_name and User.objects.filter(last_name=last_name).exists():
+        if last_name and CustomUser.objects.filter(last_name=last_name).exists():
             self.add_error('last_name', 'A user with this last name already exists.')
 
         return cleaned_data
+
+    def clean_phone_number(self):
+        phone_number = self.cleaned_data['phone_number']
+        if not phone_number:
+            raise forms.ValidationError(_('This field is required.'))
+        if not phone_number.is_valid():
+            raise forms.ValidationError(_('Invalid phone number. Try again!'))
+        return phone_number
 
     def save(self, commit=True):
         instance = super().save(commit=False)
@@ -62,7 +76,7 @@ class CustomUSerCreationForm(UserCreationForm):
 # for profile update
 class UserUpdateForm(forms.ModelForm):
     class Meta:
-        model = User
+        model = CustomUser
         fields = ['username', 'email']
 
 
@@ -75,7 +89,7 @@ class ProfileUpdateForm(forms.ModelForm):
 # Password change
 class Set_Password_Form(SetPasswordForm):
     class Meta:
-        model = User
+        model = CustomUser
         fields = ['new_password1', 'new_password2']
 
 

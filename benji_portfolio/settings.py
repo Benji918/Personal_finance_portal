@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     # third party apps
     'crispy_forms',
     'crispy_bootstrap5',
+    'phonenumber_field',
     # 'captcha',
 ]
 
@@ -133,6 +134,11 @@ AUTHENTICATION_BACKENDS = [
     'accounts.backends.EmailBackend',
 ]
 
+LOGIN_URL = 'accounts:login'
+
+# AUTH_USER_MODEL = 'accounts.CustomUser'
+
+# PHONENUMBER_DEFAULT_REGION = "NG"
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 
