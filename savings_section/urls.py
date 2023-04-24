@@ -2,11 +2,9 @@ from django.urls import path
 
 from .views import SavingsAccountListView, SavingsAccountCreateView, \
     SavingsAccountUpdateView, SavingsAccountDeleteView, SavingsAccountDetailView, SavingsAccountSummaryTiles, \
-    DepositListView, DepositUpdateView, DepositDeleteView, DepositCreateView, DepositDetailView, DepositSummaryTiles, \
+    DepositListView, DepositUpdateView, DepositDeleteView, DepositCreateView, DepositDetailView, \
     WithdrawalListView, WithdrawalDetailView, WithdrawalCreateView, WithdrawalUpdateView, WithdrawalDeleteView, \
-    WithdrawalSummaryTiles,\
-    SavingsGoalDetailView, SavingsGoalListView, SavingsGoalCreateView, SavingsGoalDeleteView, SavingsGoalUpdateView,\
-    SavingsGoalSummaryTiles
+    SavingsGoalDetailView, SavingsGoalListView, SavingsGoalCreateView, SavingsGoalDeleteView, SavingsGoalUpdateView
 
 app_name = 'savings_section'
 
