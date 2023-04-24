@@ -7,7 +7,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
-from django.core.mail import EmailMessage
 from django.core.mail import send_mail
 from django.db.models.query_utils import Q
 from django.shortcuts import render, redirect
@@ -15,19 +14,20 @@ from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.safestring import mark_safe
-from django.views import View
+from .send_OTP import send_sms_code
 
-from accounts.forms import CustomUSerCreationForm, UserUpdateForm, ProfileUpdateForm
-from .forms import Set_Password_Form, Password_Reset_Form
+from accounts.forms import CustomUSerCreationForm, UpdateProfileForm
+from .forms import Set_Password_Form, Password_Reset_Form, SMSCodeForm
 from .tokens import account_activation_token
 from .send_activation_email import send_activation_email
+from .models import CustomUser
 
 
 # Create your views here.
 def register(request):
     form = CustomUSerCreationForm()
     if request.method == 'POST':
-        form = CustomUSerCreationForm(request.POST)
+        form = CustomUSerCreationForm(request.POST or None)
         if form.is_valid():
             # save form in the memory not in database
             user = form.save(commit=False)
@@ -50,14 +50,19 @@ def login_view(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
         remember_me = request.POST.get('remember_me')
+        if remember_me:
+            request.session.set_expiry(0)
         user = authenticate(request, username=email, password=password)
         if user is not None:
-            if user.is_active:
+            if user.email_verified and not user.enable_two_factor_authentication:
                 login(request, user=user)
-                if not remember_me:
-                    request.session.set_expiry(0)
                 messages.success(request, message=f'{user.email} successfully logged in!')
                 return redirect('website:index')
+            elif user.email_verified and user.enable_two_factor_authentication:
+                user_id = user.id
+                send_sms_code(phone_number=user.phone_number, code=user.smscode.number)
+                messages.success(request, message=f'{user.email} SMS verification code sent!')
+                return redirect('accounts:sms_verify', user_id=user_id)  # redirect to other page with user ID
 
             else:
                 messages.error(request, 'Your account is inactive. Click on the activation link in your inbox to '
@@ -68,6 +73,23 @@ def login_view(request):
     return render(request, 'accounts/login.html')
 
 
+def sms_verification_view(request):
+    user = request.GET.get('user_id')  # get the user ID from the URL query string
+    form = SMSCodeForm(user_id=user)
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            user = authenticate(request, username=user.email, password=user.password)
+            login(request, user=user)
+            messages.success(request, message=f'{user.email} successfully logged in!')
+            return redirect('website:index')
+        else:
+            messages.error(request, 'An error occurred!')
+
+    context = {'form': form}
+    return render(request, 'accounts/sms_verify.html', context)
+
+
 @login_required
 def logout_view(request):
     logout(request)
@@ -75,43 +97,63 @@ def logout_view(request):
     return redirect('accounts:login')
 
 
-class MyProfile(LoginRequiredMixin, View):
-    def get(self, request):
-        user_form = UserUpdateForm(instance=request.user)
-        profile_form = ProfileUpdateForm(instance=request.user.profile)
+# class MyProfile(LoginRequiredMixin, View):
+#     def get(self, request):
+#         user_form = UserUpdateForm(instance=request.user)
+#         print(user_form)
+#         profile_form = ProfileUpdateForm(instance=request.user.profile)
+#         print(profile_form)
+#         context = {
+#             'user_form': user_form,
+#             'profile_form': profile_form
+#         }
+#
+#         return render(request, 'accounts/profile/profile.html', context)
+#
+#     def post(self, request):
+#         user_form = UserUpdateForm(
+#             request.POST,
+#             instance=request.user
+#         )
+#         profile_form = ProfileUpdateForm(
+#             request.POST,
+#             request.FILES,
+#             instance=request.user.profile
+#         )
+#         two_FA = request.POST.get('2FA')
+#         if user_form.is_valid():
+#             if two_FA:
+#                 request.user.enable_two_factor_authentication = True
+#             user_form.save()
+#             profile_form.save()
+#             messages.success(request, 'Your profile has been updated successfully')
+#
+#             return render(request, 'accounts/profile/profile.html')
+#         else:
+#             context = {
+#                 'user_form': user_form,
+#                 'profile_form': profile_form
+#             }
+#             messages.error(request, 'Error updating you profile')
+#
+#             return render(request, 'accounts/profile/profile.html', context)
 
-        context = {
-            'user_form': user_form,
-            'profile_form': profile_form
-        }
 
-        return render(request, 'accounts/profile/profile.html', context)
-
-    def post(self, request):
-        user_form = UserUpdateForm(
-            request.POST,
-            instance=request.user
-        )
-        profile_form = ProfileUpdateForm(
-            request.POST,
-            request.FILES,
-            instance=request.user.profile
-        )
-
-        if user_form.is_valid() and profile_form.is_valid():
-            user_form.save()
-            profile_form.save()
-            messages.success(request, 'Your profile has been updated successfully')
-
-            return render(request, 'accounts/profile/profile.html')
+@login_required
+def update_profile(request):
+    if request.method == 'POST':
+        form = UpdateProfileForm(request.POST, request.FILES, instance=request.user)
+        two_FA = request.POST.get('2FA')
+        if two_FA is not None:
+            request.user.enable_two_factor_authentication = True
         else:
-            context = {
-                'user_form': user_form,
-                'profile_form': profile_form
-            }
-            messages.error(request, 'Error updating you profile')
-
-            return render(request, 'accounts/profile/profile.html', context)
+            request.user.enable_two_factor_authentication = False
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your profile has been updated successfully')
+    else:
+        form = UpdateProfileForm(instance=request.user)
+    return render(request, 'accounts/profile/profile.html', {'form': form})
 
 
 # DELETE USER ACCOUNT
@@ -229,6 +271,7 @@ def activate(request, uidb64, token):
 
     if user and account_activation_token.check_token(user, token):
         user.is_active = True
+        user.email_verified = True
         user.save()
         messages.success(request, 'Thank you for your email confirmation. Now you can login your account.')
         return redirect('accounts:login')
@@ -236,5 +279,3 @@ def activate(request, uidb64, token):
         messages.error(request, 'Activation link is invalid!')
 
     return redirect('website:index')
-
-

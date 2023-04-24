@@ -123,7 +123,6 @@ JAZZMIN_SETTINGS = {
     },
 }
 
-
 JAZZMIN_UI_TWEAKS = {
     "theme": "cyborg",
     "dark_mode_theme": "darkly",
@@ -136,15 +135,35 @@ AUTHENTICATION_BACKENDS = [
 
 LOGIN_URL = 'accounts:login'
 
-# AUTH_USER_MODEL = 'accounts.CustomUser'
+AUTH_USER_MODEL = 'accounts.CustomUser'
 
-# PHONENUMBER_DEFAULT_REGION = "NG"
+# Custom Authentication settings
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+
+PHONENUMBER_DEFAULT_REGION = "NG"
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5 MB
+
+TWILIO_ACCOUNT_SID = env('TWILIO_ACCOUNT_SID')
+TWILIO_AUTH_TOKEN = env('TWILIO_AUTH_TOKEN')
+TWILIO_FROM_NUMBER = env('TWILIO_FROM_NUMBER')
+
+
+# Twilio SMS backend for sending verification codes
+SMS_BACKEND = 'django_twilio.sms.TwilioBackend'
+SMS_BACKEND_KWARGS = {
+    'account_sid': TWILIO_ACCOUNT_SID,
+    'auth_token': TWILIO_AUTH_TOKEN,
+    'from_number': TWILIO_FROM_NUMBER,
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

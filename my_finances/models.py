@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.conf import settings
 
 
 # Create your models here.
@@ -18,7 +18,7 @@ class Income(models.Model):
         MON = 4, 'MONTHS'
         YEA = 5, 'YEARS'
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_incomes')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_incomes')
     value = models.DecimalField(max_digits=10, decimal_places=2)
     date = models.DateField()
     type = models.PositiveSmallIntegerField(choices=ITypes.choices)
@@ -57,7 +57,7 @@ class Outcome(models.Model):
         MON = 4, 'MONTHS'
         YEA = 5, 'YEARS'
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_outcomes')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_outcomes')
     value = models.DecimalField(max_digits=10, decimal_places=2)
     date = models.DateField()
     type = models.PositiveSmallIntegerField(choices=OTypes.choices)
@@ -81,7 +81,7 @@ class Balance(models.Model):
         CUR = 1, "CURRENT"
         SAV = 2, "SAVINGS"
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_balances')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_balances')
     value = models.DecimalField(max_digits=10, decimal_places=2)
     type = models.PositiveSmallIntegerField(choices=BType.choices)
     date = models.DateField()

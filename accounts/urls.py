@@ -1,15 +1,14 @@
 from django.urls import path
 from accounts import views
-from accounts.views import MyProfile
-
 
 app_name = 'accounts'
 
 urlpatterns = [
     path('register/', views.register, name='register'),
     path('login/', views.login_view, name='login'),
+    path('sms_verify/', views.sms_verification_view, name='sms_verify'),
     path('logout/', views.logout_view, name='logout'),
-    path('profile/', MyProfile.as_view(), name='profile'),
+    path('profile/', views.update_profile, name='profile'),
     path('activate/<uidb64>/<token>', views.activate, name='activate'),
     path('delete/', views.delete_user_account, name='delete'),
     # password change
