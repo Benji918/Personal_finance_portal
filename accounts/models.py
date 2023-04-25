@@ -108,7 +108,7 @@ class Profile(models.Model):
 
 
 class SMSCode(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='smscode')
     number = models.CharField(max_length=6, blank=False, null=False)
 
     def __str__(self):

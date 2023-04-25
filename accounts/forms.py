@@ -119,9 +119,14 @@ class Password_Reset_Form(PasswordResetForm):
 
 
 class SMSCodeForm(forms.ModelForm):
+    class Meta:
+        model = SMSCode
+        fields = ['number']
+
     number = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-control form-control-user', 'placeholder': 'Enter verification code'
     }), label='SMS code')
+
 
     def __init__(self, *args, **kwargs):
         user_id = kwargs.pop('user_id', None)  # pop the user ID from the keyword arguments
@@ -129,20 +134,21 @@ class SMSCodeForm(forms.ModelForm):
         self.user_id = user_id  # save the user ID as an instance variable
 
     def sms_validate(self):
-        user = CustomUser.objects.get(pk=self.user_id)
-        num = self.cleaned_data.get['number']
+        user_id = self.user_id
+        if user_id is None:
+            raise forms.ValidationError(_('Invalid user ID.'))
+        try:
+            user = CustomUser.objects.get(id=user_id)
+            print(user)
+        except CustomUser.DoesNotExist:
+            raise forms.ValidationError(_('Invalid user ID.'))
+        num = self.cleaned_data.get('number')
         if num != str(user.smscode.number):
+            print(num)
+            print(user.smscode.number)
             raise forms.ValidationError(_('Invalid SMS verification code. Try again!'))
         return num
 
-    def save(self, commit=True):
-        instance = super().save(commit=False)
-        instance.user.smscode.number = self.cleaned_data['number']
-        if commit:
-            instance.save()
-        return instance
 
 
-    class Meta:
-        model = SMSCode
-        fields = ['number']
+

@@ -8,7 +8,7 @@ def send_sms_code(phone_number, code):
     message = client.messages \
         .create(
         body=f"Your verification code is {code}",
-        from_=settings.TWILIO_PHONE_NUMBER,
+        from_=settings.TWILIO_FROM_NUMBER,
         to=phone_number
     )
 
