@@ -1,4 +1,5 @@
 from babel._compat import force_text
+from django import forms
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -60,7 +61,8 @@ def login_view(request):
                 return redirect('website:index')
             elif user.email_verified and user.enable_two_factor_authentication:
                 user_id = user.id
-                send_sms_code(phone_number=user.phone_number, code=user.smscode.number)
+                # send SMS verification code to user phone number
+                # send_sms_code(phone_number='+2348106671579', code=user.smscode.number)
                 messages.success(request, message=f'{user.email} SMS verification code sent!')
                 return redirect('accounts:sms_verify', user_id=user_id)  # redirect to other page with user ID
 
@@ -73,16 +75,23 @@ def login_view(request):
     return render(request, 'accounts/login.html')
 
 
-def sms_verification_view(request):
-    user = request.GET.get('user_id')  # get the user ID from the URL query string
-    form = SMSCodeForm(user_id=user)
+def sms_verification_view(request, user_id):
+    print(user_id)
+    form = SMSCodeForm(request.POST or None, user_id=user_id)
     if request.method == 'POST':
         if form.is_valid():
-            form.save()
-            user = authenticate(request, username=user.email, password=user.password)
-            login(request, user=user)
-            messages.success(request, message=f'{user.email} successfully logged in!')
-            return redirect('website:index')
+            try:
+                num = form.sms_validate()
+            except forms.ValidationError as e:
+                # Handle validation error
+                messages.error(request, message=f'{e}')
+            else:
+                user = CustomUser.objects.get(id=user_id)
+                print(user)
+                auth_user = authenticate(request, username=user.email, password=user.password, backend='django.contrib.auth.backends.ModelBackend')
+                login(request, user=auth_user)
+                messages.success(request, message=f'{auth_user.email} successfully logged in!')
+                return redirect('website:index')
         else:
             messages.error(request, 'An error occurred!')
 
