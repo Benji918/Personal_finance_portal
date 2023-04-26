@@ -43,6 +43,7 @@ def register(request):
 
 def login_view(request):
     if request.user.is_authenticated:
+        # If the user is already authenticated, redirect to index page
         messages.info(request, mark_safe(f'You are already logged in as <b>{request.user.username}</b>. To switch user'
                                          f' <a href="#" data-toggle="modal" data-target="#logoutModal"></i>'
                                          f'log out here.</a>'))
@@ -60,9 +61,13 @@ def login_view(request):
                 messages.success(request, message=f'{user.email} successfully logged in!')
                 return redirect('website:index')
             elif user.email_verified and user.enable_two_factor_authentication:
+                # If email is verified and two-factor authentication is enabled, redirect to the sms verification page
+                request.session['email'] = email
+                request.session['user_id'] = user.id
+                request.session['password'] = password
                 user_id = user.id
                 # send SMS verification code to user phone number
-                # send_sms_code(phone_number='+2348106671579', code=user.smscode.number)
+                send_sms_code(phone_number='+2348106671579', code=user.smscode.number)
                 messages.success(request, message=f'{user.email} SMS verification code sent!')
                 return redirect('accounts:sms_verify', user_id=user_id)  # redirect to other page with user ID
 
@@ -76,6 +81,15 @@ def login_view(request):
 
 
 def sms_verification_view(request, user_id):
+    # Get the email, user_id, and password from the session
+    email = request.session.get('email')
+    password = request.session.get('password')
+    session_user_id = request.session.get('user_id')
+
+    # Check if the user_id from the session matches the user_id in the URL
+    if session_user_id != user_id:
+        messages.error(request, 'Invalid user ID.')
+        return redirect('accounts:login')
     print(user_id)
     form = SMSCodeForm(request.POST or None, user_id=user_id)
     if request.method == 'POST':
@@ -88,7 +102,7 @@ def sms_verification_view(request, user_id):
             else:
                 user = CustomUser.objects.get(id=user_id)
                 print(user)
-                auth_user = authenticate(request, username=user.email, password=user.password, backend='django.contrib.auth.backends.ModelBackend')
+                auth_user = authenticate(request, username=email, password=password)
                 login(request, user=auth_user)
                 messages.success(request, message=f'{auth_user.email} successfully logged in!')
                 return redirect('website:index')

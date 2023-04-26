@@ -129,7 +129,6 @@ JAZZMIN_UI_TWEAKS = {
 }
 
 AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
     'accounts.backends.EmailBackend',
 ]
 
