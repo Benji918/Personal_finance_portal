@@ -282,9 +282,6 @@ class GetSummaryTiles(TemplateView):
             # Calculate the percentage spent
             percentage_spent = 100 - round(context['budget_amount_spent'] / context['total_budget'] * 100, 2)
 
-            if percentage_spent == 0:
-                percentage_spent = 100
-
         # Add the percentage spent to the context
         context['percentage_spent'] = percentage_spent
 

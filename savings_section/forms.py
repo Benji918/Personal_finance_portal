@@ -72,6 +72,7 @@ class WithdrawalForm(forms.ModelForm):
             elif amount != int(amount):
                 self.add_error(field='amount', error='amount must be a whole number')
                 is_valid = False
+
         return is_valid
 
     class Meta:
@@ -95,6 +96,12 @@ class SavingsGoalForm(forms.ModelForm):
                 is_valid = False
             elif amount != int(amount):
                 self.add_error(field='amount', error='amount must be a whole number')
+                is_valid = False
+        if 'savings' in self.cleaned_data and 'amount' in self.cleaned_data:
+            savings = self.cleaned_data['savings']
+            amount = self.cleaned_data['amount']
+            if amount < savings.amount:
+                self.add_error(field='amount', error='SavingsGoal amount must be greater than savingsAccount amount')
                 is_valid = False
         return is_valid
 

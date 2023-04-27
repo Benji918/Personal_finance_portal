@@ -331,9 +331,6 @@ class WithdrawalDeleteView(DeleteView):
         return reverse_lazy('savings_section:withdrawal:list')
 
 
-@method_decorator(login_required, name='dispatch')
-class WithdrawalSummaryTiles(ListView):
-    pass
 
 
 @method_decorator(login_required, name='dispatch')
@@ -410,6 +407,3 @@ class SavingsGoalDeleteView(DeleteView):
         return reverse_lazy('savings_section:savings_goals_list')
 
 
-@method_decorator(login_required, name='dispatch')
-class SavingsGoalSummaryTiles(ListView):
-    pass

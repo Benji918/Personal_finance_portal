@@ -31,7 +31,7 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOST = ['*']
 
 # Application definition
 INSTALLED_APPS = [
@@ -176,13 +176,16 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'benji_portfolio.urls'
 
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
-]
+# STATICFILES_DIRS = [
+#     BASE_DIR / "static",
+# ]
 
 STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
+
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 MEDIA_ROOT = BASE_DIR / 'media'
 
@@ -214,8 +217,13 @@ WSGI_APPLICATION = 'benji_portfolio.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'railway',
+        'HOST': 'containers-us-west-66.railway.app',
+        'PASSWORD': 'HwzStPMM79jWEFqMpz1G',
+        'PORT': '6728',
+        'USER': 'postgres',
+
     }
 }
 
