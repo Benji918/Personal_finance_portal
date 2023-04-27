@@ -145,9 +145,6 @@ ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 
 PHONENUMBER_DEFAULT_REGION = "NG"
 
-CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
-
-CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5 MB
 
@@ -218,11 +215,11 @@ WSGI_APPLICATION = 'benji_portfolio.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'railway',
-        'HOST': 'containers-us-west-66.railway.app',
-        'PASSWORD': 'HwzStPMM79jWEFqMpz1G',
-        'PORT': '6728',
-        'USER': 'postgres',
+        'NAME': env('POSTGRES_NAME'),
+        'HOST': env('POSTGRES_HOST'),
+        'PASSWORD': env('POSTGRES_PASSWORD'),
+        'PORT': env('POSTGRES_PORT'),
+        'USER': env('POSTGRES_USER'),
 
     }
 }
