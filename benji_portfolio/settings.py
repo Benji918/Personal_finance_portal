@@ -177,7 +177,7 @@ ROOT_URLCONF = 'benji_portfolio.urls'
 #     BASE_DIR / "static",
 # ]
 
-STATIC_URL = '/static/'
+STATIC_URL = '/staticfiles/'
 
 MEDIA_URL = '/media/'
 
