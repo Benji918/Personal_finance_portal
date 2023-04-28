@@ -163,6 +163,7 @@ SMS_BACKEND_KWARGS = {
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -177,12 +178,20 @@ ROOT_URLCONF = 'benji_portfolio.urls'
 #     BASE_DIR / "static",
 # ]
 
-STATIC_URL = '/staticfiles/'
+STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+STORAGES = {
+    # ...
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 MEDIA_ROOT = BASE_DIR / 'media'
 
