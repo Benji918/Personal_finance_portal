@@ -29,9 +29,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['personalfinaceportal-production.up.railway.app']
+ALLOWED_HOSTS = ['personalfinaceportal-production.up.railway.app', 'http://127.0.0.1:9000/']
 
 # Application definition
 INSTALLED_APPS = [
@@ -172,11 +172,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'benji_portfolio.urls'
+CSRF_TRUSTED_ORIGINS = ['personalfinaceportal-production.up.railway.app']
 
-# STATICFILES_DIRS = [
-#     BASE_DIR / "static",
-# ]
+ROOT_URLCONF = 'benji_portfolio.urls'
 
 STATIC_URL = '/static/'
 
