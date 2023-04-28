@@ -15,6 +15,8 @@ from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.safestring import mark_safe
+from django.views.decorators.csrf import csrf_protect
+
 from .send_OTP import send_sms_code
 
 from accounts.forms import CustomUSerCreationForm, UpdateProfileForm
@@ -25,6 +27,7 @@ from .models import CustomUser
 
 
 # Create your views here.
+@csrf_protect
 def register(request):
     form = CustomUSerCreationForm()
     if request.method == 'POST':
@@ -41,6 +44,7 @@ def register(request):
     return render(request, 'accounts/register.html', context)
 
 
+@csrf_protect
 def login_view(request):
     if request.user.is_authenticated:
         # If the user is already authenticated, redirect to index page
@@ -79,7 +83,7 @@ def login_view(request):
             messages.error(request, 'Invalid username or password. Check your credentials!')
     return render(request, 'accounts/login.html')
 
-
+@csrf_protect
 def sms_verification_view(request, user_id):
     # Get the email, user_id, and password from the session
     email = request.session.get('email')
@@ -112,7 +116,7 @@ def sms_verification_view(request, user_id):
     context = {'form': form}
     return render(request, 'accounts/sms_verify.html', context)
 
-
+@csrf_protect
 @login_required
 def logout_view(request):
     logout(request)
@@ -161,7 +165,7 @@ def logout_view(request):
 #
 #             return render(request, 'accounts/profile/profile.html', context)
 
-
+@csrf_protect
 @login_required
 def update_profile(request):
     if request.method == 'POST':
@@ -180,6 +184,7 @@ def update_profile(request):
 
 
 # DELETE USER ACCOUNT
+@csrf_protect
 @login_required
 def delete_user_account(request):
     if request.method == 'POST':
@@ -191,6 +196,7 @@ def delete_user_account(request):
 
 
 # password views
+@csrf_protect
 @login_required
 def password_change(request):
     user = request.user
