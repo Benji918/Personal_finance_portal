@@ -9,6 +9,7 @@ from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_protect
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView, TemplateView
 
 from .forms import CategoryForm, TransactionForm, BudgetForm
@@ -29,6 +30,7 @@ class BudgetListView(ListView):
 
 
 @method_decorator(login_required, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class BudgetCreateView(CreateView):
     model = Budget
     form_class = BudgetForm
@@ -47,6 +49,7 @@ class BudgetCreateView(CreateView):
 
 
 @method_decorator(login_required, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class BudgetUpdateView(UpdateView):
     model = Budget
     form_class = BudgetForm
@@ -65,6 +68,7 @@ class BudgetUpdateView(UpdateView):
 
 
 @method_decorator(login_required, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class BudgetDetailView(DetailView):
     model = Budget
     template_name = 'budget_section/category_transaction_budget_detail.html'
@@ -76,6 +80,7 @@ class BudgetDetailView(DetailView):
 
 
 @method_decorator(login_required, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class BudgetDeleteView(DeleteView):
     model = Budget
     template_name = 'budget_section/category_transaction_budget_delete.html'
@@ -104,6 +109,7 @@ class CategoryListView(ListView):
 
 
 @method_decorator(login_required, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class CategoryCreateView(CreateView):
     model = Category
     form_class = CategoryForm
@@ -122,6 +128,7 @@ class CategoryCreateView(CreateView):
 
 
 @method_decorator(login_required, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class CategoryUpdateView(UpdateView):
     model = Category
     form_class = CategoryForm
@@ -140,6 +147,7 @@ class CategoryUpdateView(UpdateView):
 
 
 @method_decorator(login_required, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class CategoryDetailView(DetailView):
     model = Category
     template_name = 'budget_section/category_transaction_budget_detail.html'
@@ -151,6 +159,7 @@ class CategoryDetailView(DetailView):
 
 
 @method_decorator(login_required, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class CategoryDeleteView(DeleteView):
     model = Budget
     template_name = 'budget_section/category_transaction_budget_delete.html'
@@ -177,6 +186,7 @@ class TransactionListView(ListView):
 
 
 @method_decorator(login_required, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class TransactionCreateView(CreateView):
     model = Transaction
     form_class = TransactionForm
@@ -195,6 +205,7 @@ class TransactionCreateView(CreateView):
 
 
 @method_decorator(login_required, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class TransactionUpdateView(UpdateView):
     model = Transaction
     form_class = TransactionForm
@@ -213,6 +224,7 @@ class TransactionUpdateView(UpdateView):
 
 
 @method_decorator(login_required, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class TransactionDetailView(DetailView):
     model = Transaction
     template_name = 'budget_section/category_transaction_budget_detail.html'
@@ -224,6 +236,7 @@ class TransactionDetailView(DetailView):
 
 
 @method_decorator(login_required, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class TransactionDeleteView(DeleteView):
     model = Transaction
     template_name = 'budget_section/category_transaction_budget_delete.html'

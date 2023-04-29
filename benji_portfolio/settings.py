@@ -31,7 +31,7 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['personalfinaceportal-production.up.railway.app', 'http://127.0.0.1:9000/']
+ALLOWED_HOSTS = ['personalfinaceportal-production.up.railway.app', '127.0.0.1']
 
 # Application definition
 INSTALLED_APPS = [

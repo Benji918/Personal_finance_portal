@@ -1,10 +1,13 @@
 from datetime import date, timedelta
 
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_protect
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.views.generic.list import ListView
@@ -14,6 +17,7 @@ from my_finances.helpers import calculate_repetitive_total
 from my_finances.models import Income, Outcome, Balance
 
 
+@method_decorator(login_required, name='dispatch')
 class IncomeListView(ListView):
     model = Income
     paginate_by = 100
@@ -25,6 +29,8 @@ class IncomeListView(ListView):
         return Income.objects.filter(user=user).order_by('-id')
 
 
+@method_decorator(login_required, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class IncomeDetailView(DetailView):
     model = Income
     template_name = 'my_finances/balance_income_outcome_detail.html'
@@ -38,6 +44,8 @@ class IncomeDetailView(DetailView):
     # context_object_name = 'income'
 
 
+@method_decorator(login_required, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class IncomeCreateView(CreateView):
     model = Income
     form_class = IncomeForm
@@ -55,6 +63,8 @@ class IncomeCreateView(CreateView):
         return reverse_lazy('my_finances:income_list')
 
 
+@method_decorator(login_required, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class IncomeUpdateView(UpdateView):
     model = Income
     form_class = IncomeForm
@@ -70,6 +80,8 @@ class IncomeUpdateView(UpdateView):
         return reverse('my_finances:income_list')
 
 
+@method_decorator(login_required, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class IncomeDeleteView(DeleteView):
     model = Income
     template_name = 'my_finances/balance_income_outcome_confirm_delete.html'
@@ -100,6 +112,7 @@ class OutcomeListView(ListView):
         return Outcome.objects.filter(user=user).order_by('-id')
 
 
+@method_decorator(login_required, name='dispatch')
 class OutcomeDetailView(DetailView):
     model = Outcome
     template_name = 'my_finances/balance_income_outcome_detail.html'
@@ -110,6 +123,8 @@ class OutcomeDetailView(DetailView):
         return Outcome.objects.filter(user=user)
 
 
+@method_decorator(login_required, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class OutcomeCreateView(CreateView):
     model = Outcome
     form_class = OutcomeForm
@@ -127,6 +142,8 @@ class OutcomeCreateView(CreateView):
         return reverse_lazy('my_finances:outcome_list')
 
 
+@method_decorator(login_required, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class OutcomeUpdateView(UpdateView):
     model = Outcome
     form_class = OutcomeForm
@@ -142,6 +159,8 @@ class OutcomeUpdateView(UpdateView):
         return reverse('my_finances:outcome_list')
 
 
+@method_decorator(login_required, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class OutcomeDeleteView(DeleteView):
     model = Outcome
     template_name = 'my_finances/balance_income_outcome_confirm_delete.html'
@@ -156,6 +175,7 @@ class OutcomeDeleteView(DeleteView):
         return reverse_lazy('my_finances:outcome_list')
 
 
+@method_decorator(login_required, name='dispatch')
 class BalanceListView(ListView):
     model = Balance
     paginate_by = 100
@@ -167,6 +187,8 @@ class BalanceListView(ListView):
         return Balance.objects.filter(user=user).order_by('-id')
 
 
+@method_decorator(login_required, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class BalanceDetailView(DetailView):
     model = Balance
     template_name = 'my_finances/balance_income_outcome_detail.html'
@@ -177,6 +199,8 @@ class BalanceDetailView(DetailView):
         return Balance.objects.filter(user=user)
 
 
+@method_decorator(login_required, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class BalanceCreateView(CreateView):
     model = Balance
     form_class = BalanceForm
@@ -194,6 +218,8 @@ class BalanceCreateView(CreateView):
         return reverse_lazy('my_finances:balance_list')
 
 
+@method_decorator(login_required, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class BalanceUpdateView(UpdateView):
     model = Balance
     form_class = BalanceForm
@@ -209,6 +235,8 @@ class BalanceUpdateView(UpdateView):
         return reverse_lazy('my_finances:balance_list')
 
 
+@method_decorator(login_required, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class BalanceDeleteView(DeleteView):
     model = Balance
     template_name = 'my_finances/balance_income_outcome_confirm_delete.html'
@@ -223,6 +251,7 @@ class BalanceDeleteView(DeleteView):
         return reverse_lazy('my_finances:balance_list')
 
 
+@login_required()
 def current_period(request):
     make_calls = True
     last_balance = Balance.objects.filter(user=request.user, type=1).order_by('-date').first()
@@ -233,6 +262,7 @@ def current_period(request):
     return render(request, 'my_finances/current_period.html', context={'make_calls': make_calls})
 
 
+@login_required
 def year_overview(request):
     make_calls = True
     last_balance = Balance.objects.filter(user=request.user, type=1).order_by('-date').first()
@@ -244,6 +274,7 @@ def year_overview(request):
     return render(request, 'my_finances/year_overview.html', context={'make_calls': make_calls})
 
 
+@login_required
 def get_summary_tiles(request):
     today = date.today()
     last_balance = Balance.objects.filter(user=request.user, type=1).order_by('-date').first()
@@ -276,6 +307,7 @@ def get_summary_tiles(request):
     })
 
 
+@login_required
 def get_year_chart(request):
     balance_type = request.GET.get('balance_type')
     if balance_type not in ['current', 'savings']:
@@ -372,6 +404,7 @@ def get_year_chart(request):
                          'data_today': data_today})
 
 
+@login_required()
 def get_income_or_outcome_by_type(request):
     get_what = request.GET.get('get_what')
     summary_type = request.GET.get('summary_type')

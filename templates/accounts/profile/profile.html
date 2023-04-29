@@ -13,12 +13,12 @@
                             <div class="text-center">
                                 <h1 class="h4 text-gray-900 mb-4">User Profile</h1>
                             </div>
-                            <form class="user" method="POST">
+                            <form class="user" method="POST" enctype="multipart/form-data">
                                 {% csrf_token %}
                                 {{ form|crispy }}
                                      <label for="bio">Enable 2factor authentication:</label>
                                     <label class="switch">
-                                        @FA
+                                        2FA
                                       <input type="checkbox" class="form-control form-control-user" name='2FA' value="True">
                                       <span class="slider round"></span>
                                     </label>

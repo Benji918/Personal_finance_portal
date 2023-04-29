@@ -83,6 +83,7 @@ def login_view(request):
             messages.error(request, 'Invalid username or password. Check your credentials!')
     return render(request, 'accounts/login.html')
 
+
 @csrf_protect
 def sms_verification_view(request, user_id):
     # Get the email, user_id, and password from the session
@@ -115,6 +116,7 @@ def sms_verification_view(request, user_id):
 
     context = {'form': form}
     return render(request, 'accounts/sms_verify.html', context)
+
 
 @csrf_protect
 @login_required
@@ -214,6 +216,7 @@ def password_change(request):
     return render(request, 'accounts/password-reset/password_reset_confirm.html', {'form': form})
 
 
+@csrf_protect
 def password_reset_request(request):
     if request.method == 'POST':
         form = Password_Reset_Form(request.POST)
@@ -262,6 +265,7 @@ def password_reset_request(request):
     )
 
 
+@csrf_protect
 def passwordResetConfirm(request, uidb64, token):
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))

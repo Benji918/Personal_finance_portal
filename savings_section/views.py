@@ -10,6 +10,7 @@ from django.db.models.functions import Trunc
 from django.http import HttpResponseRedirect
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_protect
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView, TemplateView
 from django.urls import reverse_lazy
 from .models import SavingsAccount, Deposit, Withdrawal, SavingsGoal
@@ -31,6 +32,7 @@ class SavingsAccountListView(ListView):
 
 
 @method_decorator(login_required, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class SavingsAccountCreateView(CreateView):
     model = SavingsAccount
     form_class = SavingsAccountForm
@@ -49,6 +51,7 @@ class SavingsAccountCreateView(CreateView):
 
 
 @method_decorator(login_required, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class SavingsAccountUpdateView(UpdateView):
     model = SavingsAccount
     form_class = SavingsAccountForm
@@ -67,6 +70,7 @@ class SavingsAccountUpdateView(UpdateView):
 
 
 @method_decorator(login_required, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class SavingsAccountDetailView(DetailView):
     model = SavingsAccount
     template_name = 'savings_section/savings_section_detail.html'
@@ -78,6 +82,7 @@ class SavingsAccountDetailView(DetailView):
 
 
 @method_decorator(login_required, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class SavingsAccountDeleteView(DeleteView):
     model = SavingsAccount
     template_name = 'savings_section/savings_section_delete.html'
@@ -191,6 +196,7 @@ class DepositListView(ListView):
 
 
 @method_decorator(login_required, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class DepositCreateView(CreateView):
     model = Deposit
     form_class = DepositForm
@@ -209,6 +215,7 @@ class DepositCreateView(CreateView):
 
 
 @method_decorator(login_required, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class DepositUpdateView(UpdateView):
     model = Deposit
     form_class = DepositForm
@@ -227,6 +234,7 @@ class DepositUpdateView(UpdateView):
 
 
 @method_decorator(login_required, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class DepositDetailView(DetailView):
     model = Deposit
     template_name = 'savings_section/savings_section_delete.html'
@@ -238,6 +246,7 @@ class DepositDetailView(DetailView):
 
 
 @method_decorator(login_required, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class DepositDeleteView(DeleteView):
     model = Deposit
     template_name = 'savings_section/savings_section_delete.html'
@@ -253,11 +262,6 @@ class DepositDeleteView(DeleteView):
 
 
 @method_decorator(login_required, name='dispatch')
-class DepositSummaryTiles(ListView):
-    pass
-
-
-@method_decorator(login_required, name='dispatch')
 class WithdrawalListView(ListView):
     model = Withdrawal
     template_name = 'savings_section/savings_section_list.html'
@@ -270,6 +274,7 @@ class WithdrawalListView(ListView):
 
 
 @method_decorator(login_required, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class WithdrawalCreateView(CreateView):
     model = Withdrawal
     form_class = WithdrawalForm
@@ -288,6 +293,7 @@ class WithdrawalCreateView(CreateView):
 
 
 @method_decorator(login_required, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class WithdrawalUpdateView(UpdateView):
     model = Withdrawal
     form_class = WithdrawalForm
@@ -306,6 +312,7 @@ class WithdrawalUpdateView(UpdateView):
 
 
 @method_decorator(login_required, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class WithdrawalDetailView(DetailView):
     model = Withdrawal
     template_name = 'savings_section/savings_section_detail.html'
@@ -317,6 +324,7 @@ class WithdrawalDetailView(DetailView):
 
 
 @method_decorator(login_required, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class WithdrawalDeleteView(DeleteView):
     model = Withdrawal
     template_name = 'savings_section/savings_section_delete.html'
@@ -346,6 +354,7 @@ class SavingsGoalListView(ListView):
 
 
 @method_decorator(login_required, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class SavingsGoalCreateView(CreateView):
     model = SavingsGoal
     form_class = SavingsGoalForm
@@ -364,6 +373,7 @@ class SavingsGoalCreateView(CreateView):
 
 
 @method_decorator(login_required, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class SavingsGoalUpdateView(UpdateView):
     model = SavingsGoal
     form_class = SavingsGoalForm
@@ -382,6 +392,7 @@ class SavingsGoalUpdateView(UpdateView):
 
 
 @method_decorator(login_required, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class SavingsGoalDetailView(DetailView):
     model = SavingsGoal
     template_name = 'savings_section/savings_section_detail.html'
@@ -393,6 +404,7 @@ class SavingsGoalDetailView(DetailView):
 
 
 @method_decorator(login_required, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class SavingsGoalDeleteView(DeleteView):
     model = SavingsGoal
     template_name = 'savings_section/savings_section_delete.html'
