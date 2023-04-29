@@ -11,7 +11,7 @@ This is a personal finance application built using the Django web framework. It 
 - Secure login and data encryption
 
 ## Project ER Diagram
-![model diagram](https://github.com/Benji918/Personal_finace_portal/blob/main/model%20diagram.png)
+![model diagram](https://github.com/Benji918/Personal_finance_portal/blob/main/Django%20app.png)
 
 ## Prerequisites
 
