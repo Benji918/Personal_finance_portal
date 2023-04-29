@@ -53,7 +53,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap5',
     'phonenumber_field',
-    # 'captcha',
+    'captcha',
 ]
 
 JAZZMIN_SETTINGS = {
@@ -278,7 +278,7 @@ EMAIL_PORT = 465
 EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 
-# # RECAPCHA
-# RECAPTCHA_PUBLIC_KEY = env("RECAPTCHA_PUBLIC_KEY")
-# RECAPTCHA_PRIVATE_KEY = env("RECAPTCHA_PRIVATE_KEY")
-# SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
+# RECAPTCHA
+RECAPTCHA_PUBLIC_KEY = env("RECAPTCHA_PUBLIC_KEY")
+RECAPTCHA_PRIVATE_KEY = env("RECAPTCHA_PRIVATE_KEY")
+SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']

@@ -64,16 +64,16 @@ def login_view(request):
                 login(request, user=user)
                 messages.success(request, message=f'{user.email} successfully logged in!')
                 return redirect('website:index')
-            elif user.email_verified and user.enable_two_factor_authentication:
-                # If email is verified and two-factor authentication is enabled, redirect to the sms verification page
-                request.session['email'] = email
-                request.session['user_id'] = user.id
-                request.session['password'] = password
-                user_id = user.id
-                # send SMS verification code to user phone number
-                send_sms_code(phone_number=user.phone_number, code=user.smscode.number)
-                messages.success(request, message=f'{user.email} SMS verification code sent!')
-                return redirect('accounts:sms_verify', user_id=user_id)  # redirect to other page with user ID
+            # elif user.email_verified and user.enable_two_factor_authentication:
+            #     # If email is verified and two-factor authentication is enabled, redirect to the sms verification page
+            #     request.session['email'] = email
+            #     request.session['user_id'] = user.id
+            #     request.session['password'] = password
+            #     user_id = user.id
+            #     # send SMS verification code to user phone number
+            #     send_sms_code(phone_number=user.phone_number, code=user.smscode.number)
+            #     messages.success(request, message=f'{user.email} SMS verification code sent!')
+            #     return redirect('accounts:sms_verify', user_id=user_id)  # redirect to other page with user ID
 
             else:
                 messages.error(request, 'Your account is inactive. Click on the activation link in your inbox to '

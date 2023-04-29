@@ -16,12 +16,12 @@
                             <form class="user" method="POST" enctype="multipart/form-data">
                                 {% csrf_token %}
                                 {{ form|crispy }}
-                                     <label for="bio">Enable 2factor authentication:</label>
-                                    <label class="switch">
-                                        2FA
-                                      <input type="checkbox" class="form-control form-control-user" name='2FA' value="True">
-                                      <span class="slider round"></span>
-                                    </label>
+<!--                                     <label for="bio">Enable 2factor authentication:</label>-->
+<!--                                    <label class="switch">-->
+<!--                                        2FA-->
+<!--                                      <input type="checkbox" class="form-control form-control-user" name='2FA' value="True">-->
+<!--                                      <span class="slider round"></span>-->
+<!--                                    </label>-->
 
                                 <button type="submit" class="btn btn-primary btn-user btn-block">
                                     Update Profile
