@@ -27,7 +27,8 @@
                         {% elif list_what == 'Deposit' %}
                         <th scope="col">Name</th>
                         <th scope="col">amount</th>
-                        <th scope="col">Created on</th>
+                        <th scope="col">Description</th>
+                         <th scope="col">Created on</th>
 
                         {% elif list_what == 'Withdrawal' %}
                         <th scope="col">Name</th>
@@ -56,6 +57,7 @@
                             {% if list_what == 'Deposit' %}
                                   <td>{{ object.name }}</td>
                                   <td>{{ object.amount }}</td>
+                                    <td>{{ object.savings }}</td>
                                   <td>{{ object.description }}</td>
                                   <td>{{ object.created_at|date:"Y/m/d" }}</td>
                             {% endif %}
@@ -63,6 +65,7 @@
                              {% if list_what == 'Withdrawal' %}
                                   <td>{{ object.name }}</td>
                                   <td>{{ object.amount }}</td>
+                                  <td>{{ object.savings }}</td>
                                     <td>{{ object.description }}</td>
                                   <td>{{ object.created_at|date:"Y/m/d" }}</td>
                             {% endif %}
@@ -70,6 +73,7 @@
                             {% if list_what == 'SavingsGoal' %}
                                   <td>{{ object.name }}</td>
                                   <td>{{ object.amount }}</td>
+                                  <td>{{ object.savings }}</td>
                                     <td>{{ object.description }}</td>
                                   <td>{{ object.created_at|date:"Y/m/d" }}</td>
                             {% endif %}
