@@ -71,7 +71,7 @@ def login_view(request):
                 request.session['password'] = password
                 user_id = user.id
                 # send SMS verification code to user phone number
-                send_sms_code(phone_number='+2348106671579', code=user.smscode.number)
+                send_sms_code(phone_number=user.phone_number, code=user.smscode.number)
                 messages.success(request, message=f'{user.email} SMS verification code sent!')
                 return redirect('accounts:sms_verify', user_id=user_id)  # redirect to other page with user ID
 
@@ -124,48 +124,6 @@ def logout_view(request):
     logout(request)
     messages.success(request, 'Logged out successfully!')
     return redirect('accounts:login')
-
-
-# class MyProfile(LoginRequiredMixin, View):
-#     def get(self, request):
-#         user_form = UserUpdateForm(instance=request.user)
-#         print(user_form)
-#         profile_form = ProfileUpdateForm(instance=request.user.profile)
-#         print(profile_form)
-#         context = {
-#             'user_form': user_form,
-#             'profile_form': profile_form
-#         }
-#
-#         return render(request, 'accounts/profile/profile.html', context)
-#
-#     def post(self, request):
-#         user_form = UserUpdateForm(
-#             request.POST,
-#             instance=request.user
-#         )
-#         profile_form = ProfileUpdateForm(
-#             request.POST,
-#             request.FILES,
-#             instance=request.user.profile
-#         )
-#         two_FA = request.POST.get('2FA')
-#         if user_form.is_valid():
-#             if two_FA:
-#                 request.user.enable_two_factor_authentication = True
-#             user_form.save()
-#             profile_form.save()
-#             messages.success(request, 'Your profile has been updated successfully')
-#
-#             return render(request, 'accounts/profile/profile.html')
-#         else:
-#             context = {
-#                 'user_form': user_form,
-#                 'profile_form': profile_form
-#             }
-#             messages.error(request, 'Error updating you profile')
-#
-#             return render(request, 'accounts/profile/profile.html', context)
 
 @csrf_protect
 @login_required

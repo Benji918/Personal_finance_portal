@@ -115,13 +115,7 @@ class SMSCode(models.Model):
         return f'{self.user.username}-{self.number}'
 
     def save(self, *args, **kwargs):
-        number_list = [num for num in range(10)]
-        code_items = []
-
-        for i in range(6):
-            num = random.choice(number_list)
-            code_items.append(num)
-        code_string = ''.join(str(item) for item in code_items)
-        self.number = str(code_string)
+        verification_code = random.randint(100000, 999999)
+        self.number = str(verification_code)
 
         super().save(*args, **kwargs)

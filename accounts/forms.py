@@ -139,13 +139,10 @@ class SMSCodeForm(forms.ModelForm):
             raise forms.ValidationError(_('Invalid user ID.'))
         try:
             user = CustomUser.objects.get(id=user_id)
-            print(user)
         except CustomUser.DoesNotExist:
             raise forms.ValidationError(_('Invalid user ID.'))
         num = self.cleaned_data.get('number')
         if num != str(user.smscode.number):
-            print(num)
-            print(user.smscode.number)
             raise forms.ValidationError(_('Invalid SMS verification code. Try again!'))
         return num
 

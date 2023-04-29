@@ -9,7 +9,7 @@ def send_sms_code(phone_number, code):
         .create(
         body=f"Your verification code is {code}",
         from_=settings.TWILIO_FROM_NUMBER,
-        to=phone_number
+        to=f'{phone_number}'
     )
 
     print(message.sid)
