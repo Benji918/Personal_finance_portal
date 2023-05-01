@@ -84,7 +84,7 @@ class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     avatar = models.ImageField(
         default='avatar.jpg',  # default avatar
-        upload_to='media/profile_avatars'  # dir to store the image
+        upload_to='profile_avatars'  # dir to store the image
     )
     bio = models.CharField(max_length=1000)
     updated_at = models.DateTimeField(auto_now=True)

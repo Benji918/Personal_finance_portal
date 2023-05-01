@@ -180,7 +180,7 @@ STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
 
-MEDIA_ROOT = BASE_DIR / 'media/profile_avatars/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
@@ -193,7 +193,7 @@ STORAGES = {
     },
 }
 
-MEDIA_ROOT = BASE_DIR / 'media'
+
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 
