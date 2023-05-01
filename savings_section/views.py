@@ -121,12 +121,15 @@ class SavingsAccountSummaryTiles(TemplateView):
         # Savings balance
         context['savings_balance'] = savings_object.balance
 
-        # Get savings goal amount
-        savings_goal_object = SavingsGoal.objects.get(savings=savings_object)
+        try:
+            # Get savings goal amount
+            savings_goal_object = SavingsGoal.objects.get(savings=savings_object)
+            context['savings_goal'] = savings_goal_object
+            context['savings_goal_amount'] = savings_goal_object.amount
+        except SavingsGoal.DoesNotExist:
+            # If savings goal does not exist, add an error message to the context
+            context['error_message'] = 'Savings goal data not found.'
 
-        context['savings_goal'] = savings_goal_object
-
-        context['savings_goal_amount'] = savings_goal_object.amount
 
         # Calculate the total deposits made to the SavingsAccount
         total_deposits = savings_object.deposit_set.aggregate(total_deposits=Sum('amount'))['total_deposits'] or 0
@@ -146,18 +149,17 @@ class SavingsAccountSummaryTiles(TemplateView):
 
         # Amount diff btw the savings account and the savings goal
         diff = savings_goal_object.amount - current_balance
-
         # Calculate the percentage left to reach savings goal
         percentage_left = round(diff / savings_goal_object.amount * 100, 2)
+
 
         # Get deposit_withdrawal_history
         deposits = Deposit.objects.filter(savings=savings_object).annotate(
             timestamp=Trunc('created_at', 'month')).values('created_at').annotate(total_amount=Sum('amount')).order_by(
-            'created_at')
+            'created_at') or 0
         withdrawals = Withdrawal.objects.filter(savings=savings_object).annotate(
             timestamp=Trunc('created_at', 'month')).values('created_at').annotate(total_amount=Sum('amount')).order_by(
-            'created_at')
-        print(deposits)
+            'created_at') or 0
         labels = []
         deposit_data = []
         withdrawal_data = []

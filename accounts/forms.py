@@ -11,6 +11,7 @@ from captcha.fields import ReCaptchaField
 from captcha.widgets import ReCaptchaV2Checkbox
 
 
+
 class CustomUSerCreationForm(UserCreationForm):
     first_name = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-control form-control-user', 'placeholder': 'First Name'
@@ -56,6 +57,12 @@ class CustomUSerCreationForm(UserCreationForm):
             self.add_error('last_name', 'A user with this last name already exists.')
 
         return cleaned_data
+
+    def clean_captcha(self):
+        captcha_value = self.cleaned_data.get('captcha')
+        if not captcha_value:
+            raise forms.ValidationError(_('This field is required.'))
+        return captcha_value
 
     def clean_phone_number(self):
         phone_number = self.cleaned_data['phone_number']

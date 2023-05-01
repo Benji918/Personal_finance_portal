@@ -7,8 +7,12 @@
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Savings account name -> <b>{{savings_name}}</b></h1>
     </div>
-{% if savings %}
-    <div class="row" id="summary_tiles">
+{% if error_message %}
+  <div class="alert alert-danger" role="alert">
+    {{ error_message }}
+  </div>
+{% else %}
+<div class="row" id="summary_tiles">
         <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-primary shadow h-100 py-2">
                 <div class="card-body">
@@ -61,7 +65,7 @@
                             <div class="h5 mb-0 font-weight-bold text-gray-800" id="savings_goal_amount">
                                 {{savings_goal_amount}}
                             </div>
-                            <div class="text-black-50 small"><i><b>{{savings_goal.created_at}}</b></i></div>
+<!--                            <div class="text-black-50 small"><i><b>{{savings_goal.created_at}}</b></i></div>-->
 
                         </div>
                         <div class="col-auto">
@@ -212,13 +216,6 @@
         </div>
     </div>
 </div>
-
-
-{% else %}
-<b>No data available!</b>
-{% endif %}
-
-{% endblock %}
 
 {% block js %}
 <!-- Page level plugins -->
@@ -451,3 +448,8 @@ var myLineChart = new Chart(ctx, {
 
 
 {% endblock %}
+
+{% endif %}
+
+{% endblock %}
+
