@@ -36,7 +36,7 @@ class CustomUSerCreationForm(UserCreationForm):
 
     class Meta:
         model = CustomUser
-        fields = ['first_name', 'last_name', 'email', 'phone_number', 'captcha', 'password1', 'password2']
+        fields = ['first_name', 'last_name', 'email', 'phone_number', 'password1', 'password2', 'captcha']
 
     def clean(self):
         cleaned_data = super().clean()
@@ -59,7 +59,7 @@ class CustomUSerCreationForm(UserCreationForm):
         return cleaned_data
 
     def clean_captcha(self):
-        captcha_value = self.cleaned_data.get('captcha')
+        captcha_value = self.cleaned_data['captcha']
         if not captcha_value:
             raise forms.ValidationError(_('This field is required.'))
         return captcha_value
