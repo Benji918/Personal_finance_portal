@@ -36,7 +36,7 @@ class CustomUSerCreationForm(UserCreationForm):
 
     class Meta:
         model = CustomUser
-        fields = ['first_name', 'last_name', 'email', 'phone_number', 'password1', 'password2', 'captcha']
+        fields = ['first_name', 'last_name', 'email', 'phone_number', 'password1', 'password2']
 
     def clean(self):
         cleaned_data = super().clean()
@@ -56,18 +56,7 @@ class CustomUSerCreationForm(UserCreationForm):
         if last_name and CustomUser.objects.filter(last_name=last_name).exists():
             self.add_error('last_name', 'A user with this last name already exists.')
 
-        # check if captcha is valid
-        captcha_value = cleaned_data.get('captcha')
-        if not captcha_value or not self.fields['captcha'].widget.verify(captcha_value):
-            self.add_error('captcha', 'Invalid captcha. Please try again.')
-
         return cleaned_data
-
-    def clean_captcha(self):
-        captcha_value = self.cleaned_data['captcha']
-        if not captcha_value:
-            raise forms.ValidationError('This field is required.')
-        return captcha_value
 
     def clean_phone_number(self):
         phone_number = self.cleaned_data['phone_number']
