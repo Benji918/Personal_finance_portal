@@ -7,7 +7,6 @@ import random
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import BaseUserManager, PermissionsMixin, AbstractUser
 from django.utils.text import slugify
-from cloudinary.models import CloudinaryField
 
 
 # Create your models here.
@@ -83,7 +82,10 @@ class CustomUser(AbstractUser, PermissionsMixin):
 # Extending User Model Using a One-To-One Link
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    avatar = CloudinaryField("image")
+    avatar = models.ImageField(
+        default='avatar.jpg',  # default avatar
+        upload_to='profile_avatars'  # dir to store the image
+    )
     bio = models.CharField(max_length=1000)
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
