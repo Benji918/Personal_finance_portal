@@ -25,4 +25,4 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('budget_section/', include('budget_section.urls')),
     path('savings_section/', include('savings_section.urls')),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]

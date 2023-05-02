@@ -54,6 +54,8 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     'phonenumber_field',
     'captcha',
+    'cloudinary_storage',
+    'cloudinary',
 ]
 
 JAZZMIN_SETTINGS = {
@@ -178,9 +180,17 @@ ROOT_URLCONF = 'benji_portfolio.urls'
 
 STATIC_URL = '/static/'
 
-MEDIA_URL = '/media/'
+# MEDIA_URL = '/media/'
+#
+# MEDIA_ROOT = BASE_DIR / 'media'
 
-MEDIA_ROOT = BASE_DIR / 'media'
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': env('CLOUD_NAME'),
+    'API_KEY': env('API_KEY'),
+    'API_SECRET': env('API_SECRET'),
+}
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
