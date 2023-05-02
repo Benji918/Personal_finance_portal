@@ -48,6 +48,12 @@ class DepositForm(forms.ModelForm):
             elif amount != int(amount):
                 self.add_error(field='amount', error='amount must be a whole number')
                 is_valid = False
+        if 'amount' in self.cleaned_data and 'savings' in self.cleaned_data:
+            amount = self.cleaned_data['amount']
+            savings = self.cleaned_data['savings']
+            if amount > savings.balance:
+                self.errors(field='amount', error='deposit amount cannot be greater than savings balance')
+
         return is_valid
 
     class Meta:
@@ -72,6 +78,11 @@ class WithdrawalForm(forms.ModelForm):
             elif amount != int(amount):
                 self.add_error(field='amount', error='amount must be a whole number')
                 is_valid = False
+        if 'amount' in self.cleaned_data and 'savings' in self.cleaned_data:
+            amount = self.cleaned_data['amount']
+            savings = self.cleaned_data['savings']
+            if amount > savings.balance:
+                self.errors(field='amount', error='withdrawal amount cannot be greater than savings balance')
 
         return is_valid
 
@@ -100,11 +111,11 @@ class SavingsGoalForm(forms.ModelForm):
         if 'savings' in self.cleaned_data and 'amount' in self.cleaned_data:
             savings = self.cleaned_data['savings']
             amount = self.cleaned_data['amount']
-            if amount < savings.amount:
+            if amount < savings.balance:
                 self.add_error(field='amount', error='SavingsGoal amount must be greater than savingsAccount amount')
                 is_valid = False
         return is_valid
 
     class Meta:
         model = SavingsGoal
-        fields = ['name', 'amount', 'savings','description']
+        fields = ['name', 'amount', 'savings', 'description']
