@@ -1,5 +1,4 @@
 from django import forms
-from django.core.exceptions import ValidationError
 from .models import SavingsAccount, Deposit, Withdrawal, SavingsGoal
 
 
@@ -77,7 +76,7 @@ class WithdrawalForm(forms.ModelForm):
             amount = self.cleaned_data['amount']
             savings = self.cleaned_data['savings']
             if amount > savings.balance:
-                self.errors(field='amount', error='withdrawal amount cannot be greater than savings balance')
+                self.add_error(field='amount', error='withdrawal amount cannot be greater than savings balance')
                 is_valid = False
 
         return is_valid
