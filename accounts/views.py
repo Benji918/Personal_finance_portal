@@ -148,7 +148,7 @@ def update_profile(request):
 @login_required
 def delete_user_account(request):
     if request.method == 'POST':
-        user = User.objects.get(username=request.user.username)
+        user = CustomUser.objects.get(username=request.user.username)
         user.delete()
         messages.success(request, f'{user} account successfully deleted!')
         redirect('accounts.login')
@@ -180,7 +180,7 @@ def password_reset_request(request):
         form = Password_Reset_Form(request.POST)
         if form.is_valid():
             user_email = form.cleaned_data['email']
-            associated_user = User.objects.filter(Q(email=user_email)).first()
+            associated_user = CustomUser.objects.filter(Q(email=user_email)).first()
             if associated_user:
                 subject = "Password User Reset request"
                 message = render_to_string("accounts/password-reset/password_reset_email.html", {
@@ -227,7 +227,7 @@ def password_reset_request(request):
 def passwordResetConfirm(request, uidb64, token):
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
-        user = User.objects.get(pk=uid)
+        user = CustomUser.objects.get(pk=uid)
     except:
         user = None
 
@@ -256,7 +256,7 @@ def activate(request, uidb64, token):
     User = get_user_model()
     try:
         uid = force_text(urlsafe_base64_decode(uidb64))
-        user = User.objects.get(pk=uid)
+        user = CustomUser.objects.get(pk=uid)
     except (TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
 
