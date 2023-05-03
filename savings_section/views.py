@@ -5,7 +5,7 @@ import datetime
 import json
 
 from django.contrib import messages
-from django.db.models import Count, Sum
+from django.db.models import Count, Sum, Prefetch
 from django.db.models.functions import Trunc
 from django.http import HttpResponseRedirect
 from django.utils.decorators import method_decorator
@@ -110,7 +110,7 @@ class SavingsAccountSummaryTiles(TemplateView):
         savings_slug = self.kwargs['slug']
 
         # Get savings object from slug
-        savings_object = SavingsAccount.objects.get(slug=savings_slug)
+        savings_object = SavingsAccount.objects.select_related('user').get(slug=savings_slug)
 
         # Add the budget object to the context
         context['savings'] = savings_object
@@ -130,13 +130,19 @@ class SavingsAccountSummaryTiles(TemplateView):
             # If savings goal does not exist, add an error message to the context
             context['error_message'] = 'Savings goal data not found.'
 
-
         # Calculate the total deposits made to the SavingsAccount
         total_deposits = savings_object.deposit_set.aggregate(total_deposits=Sum('amount'))['total_deposits'] or 0
 
         # Calculate the total withdrawals made from the SavingsAccount
         total_withdrawals = savings_object.withdrawal_set.aggregate(total_withdrawals=Sum('amount'))[
                                 'total_withdrawals'] or 0
+
+        # Calculate number of savings account for a user
+        num_savings_account = SavingsAccount.objects.aggregate(num_savings_account=Count('id'))[
+                                  'num_savings_account'] or 0
+
+        # Calculate the number of savings goals for the user
+        num_savings_goal = SavingsGoal.objects.aggregate(num_savings_goal=Count('id'))['num_savings_goal'] or 0
 
         # Calculate the number of deposits made to the SavingsAccount
         num_deposits = savings_object.deposit_set.aggregate(num_deposits=Count('id'))['num_deposits'] or 0
@@ -145,32 +151,40 @@ class SavingsAccountSummaryTiles(TemplateView):
         num_withdrawals = savings_object.withdrawal_set.aggregate(num_withdrawals=Count('id'))['num_withdrawals'] or 0
 
         # Calculate the current balance of the SavingsAccount
-        current_balance = savings_object.balance + total_deposits - total_withdrawals
+        current_balance = (savings_object.balance + total_deposits) - total_withdrawals
 
-        # Amount diff btw the savings account and the savings goal
-        diff = savings_goal_object.amount - current_balance
         # Calculate the percentage left to reach savings goal
-        percentage_left = round(diff / savings_goal_object.amount * 100, 2)
+        percentage_left = round(current_balance / savings_goal_object.amount, 2) * 100
 
+        # Define the prefetch queryset
+        savings_prefetch = Prefetch('savings', queryset=SavingsAccount.objects.only('id', 'name'))
 
         # Get deposit_withdrawal_history
-        deposits = Deposit.objects.filter(savings=savings_object).annotate(
-            timestamp=Trunc('created_at', 'month')).values('created_at').annotate(total_amount=Sum('amount')).order_by(
-            'created_at') or 0
-        withdrawals = Withdrawal.objects.filter(savings=savings_object).annotate(
-            timestamp=Trunc('created_at', 'month')).values('created_at').annotate(total_amount=Sum('amount')).order_by(
-            'created_at') or 0
+        deposits = Deposit.objects.filter(savings=savings_object).prefetch_related('savings').annotate(
+            timestamp=Trunc('created_at', 'month')
+        ).values('created_at').annotate(
+            total_amount=Sum('amount')
+        ).order_by('created_at') or 0
+        withdrawals = Withdrawal.objects.filter(savings=savings_object).prefetch_related('savings').annotate(
+            timestamp=Trunc('created_at', 'month')
+        ).values('created_at').annotate(
+            total_amount=Sum('amount')
+        ).order_by('created_at') or 0
         labels = []
+        num_labels = ['Savings Accounts', 'Deposits', 'Withdrawals', 'Savings Goals']
+        num_data = [num_savings_account, num_deposits, num_withdrawals, num_savings_goal]
         deposit_data = []
         withdrawal_data = []
         for deposit in deposits:
-            labels.append(deposit['created_at'].strftime('%B %Y'))
+            labels.append(deposit['created_at'].strftime('%B %d, %Y'))
             deposit_data.append(float(deposit['total_amount']))
         for withdrawal in withdrawals:
-            labels.append(withdrawal['created_at'].strftime('%B %Y'))
+            labels.append(withdrawal['created_at'].strftime('%B %d, %Y'))
             withdrawal_data.append(float(withdrawal['total_amount']))
 
         context['labels'] = json.dumps(labels)
+        context['num_labels'] = json.dumps(num_labels)
+        context['num_data'] = json.dumps(num_data)
         context['deposit_data'] = json.dumps(deposit_data)
         context['withdrawal_data'] = json.dumps(withdrawal_data)
         context['percentage_left'] = percentage_left
@@ -341,8 +355,6 @@ class WithdrawalDeleteView(DeleteView):
         return reverse_lazy('savings_section:withdrawal:list')
 
 
-
-
 @method_decorator(login_required, name='dispatch')
 class SavingsGoalListView(ListView):
     model = SavingsGoal
@@ -419,5 +431,3 @@ class SavingsGoalDeleteView(DeleteView):
     def get_success_url(self):
         messages.success(self.request, 'SavingsGoal deleted successfully!')
         return reverse_lazy('savings_section:savings_goals_list')
-
-
