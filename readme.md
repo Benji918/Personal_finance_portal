@@ -39,53 +39,53 @@ If you don't have either of these programs installed, you can install them by fo
 
 1. Clone this repository to your local machine:
 
-git clone https://github.com/Benji918/Personal_finace_portal.git
+    git clone https://github.com/Benji918/Personal_finace_portal.git
 
 
 2. Navigate to the root directory of the project:
 
-`cd django-project`
+    `cd django-project`
 
 3. Install the required dependencies using the command:
 
-`pip install -r requirements.txt`
+    `pip install -r requirements.txt`
 
 4. Create a PostgreSQL database for the application and add the database credentials to the settings.py file.
 
 5. Run the migrations to create the database tables using the command:
 
-`python manage.py migrate`
+    `python manage.py migrate`
 
 6. Create a superuser for the application using the command:
 
-`python manage.py createsuperuser`
+    `python manage.py createsuperuser`
 
 7. Create a file named `.env` in the root directory of the application. This file should contain the following environment variables:
 
-`EMAIL_HOST_USER=<your_email_address_here>`
-`EMAIL_HOST_PASSWORD=<your_email_host_here>`
-`SECRET_KEY=<your_secret_key_here>`
-`POSTGRES_HOST=<your_database_host_here>`
-`POSTGRES_PASSWORD=<your_database_password_here>`
-`POSTGRES_PORT=<your_database_port_here>`
-`POSTGRES_USER=<your_database_user_here>`
-`POSTGRES_NAME=<your_database_name_here>`
-`RECAPTCHA_PUBLIC_KEY=<your_recaptcha_public_key_here>`
-`RECAPTCHA_PRIVATE_KEY=<your_recaptcha_private_key_here>`
-`CLOUD_NAME=<your_cloudinary_name_here>`
-`API_KEY=<your_cloudinary_api_key_here>`
-`API_SECRET=<your_cloudinary_api_secret_here>`
+    - `EMAIL_HOST_USER=<your_email_address_here>`
+    - `EMAIL_HOST_PASSWORD=<your_email_host_here>`
+    - `SECRET_KEY=<your_secret_key_here>`
+    - `POSTGRES_HOST=<your_database_host_here>`
+    - `POSTGRES_PASSWORD=<your_database_password_here>`
+    - `POSTGRES_PORT=<your_database_port_here>`
+    - `POSTGRES_USER=<your_database_user_here>`
+    - `POSTGRES_NAME=<your_database_name_here>`
+    - `RECAPTCHA_PUBLIC_KEY=<your_recaptcha_public_key_here>`
+    - `RECAPTCHA_PRIVATE_KEY=<your_recaptcha_private_key_here>`
+    - `CLOUD_NAME=<your_cloudinary_name_here>`
+    - `API_KEY=<your_cloudinary_api_key_here>`
+    - `API_SECRET=<your_cloudinary_api_secret_here>`
 
 8. Run the development server:
 
-`python manage.py runserver`
+    `python manage.py runserver`
 
 
 This will start the development server at http://127.0.0.1:8000/.
 
 If you want to specify a different port, you can do so by using the `--port` flag, like this:
 
-`python manage.py runserver --port 8080`
+    `python manage.py runserver --port 8080`
 
 
 This will start the development server at http://127.0.0.1:8080/.
