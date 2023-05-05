@@ -227,7 +227,8 @@ var ctx = document.getElementById("myAreaChart").getContext('2d');
 var myLineChart = new Chart(ctx, {
   type: 'line',
   data: {
-    labels: {{labels|safe}} ,
+    labels: {{labels_deposit|safe}},
+    labels: {{labels_withdrawal|safe}},
     datasets: [{
       label: "Deposits",
       lineTension: 0.3,
@@ -444,7 +445,7 @@ var myPieChart = new Chart(ctx, {
 <!--});-->
 
 
-<!--</script>-->
+</script>
 
 
 {% endblock %}
