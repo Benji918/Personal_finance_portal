@@ -151,7 +151,7 @@ def delete_user_account(request):
         user = CustomUser.objects.get(username=request.user.username)
         user.delete()
         messages.success(request, f'{user} account successfully deleted!')
-        redirect('accounts.login')
+        redirect('accounts.register')
     return render(request, 'accounts/profile/delete_account.html')
 
 
