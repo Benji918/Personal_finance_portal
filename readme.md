@@ -103,6 +103,7 @@ To shut down the development server, open the terminal window in which it is run
 ## Features
 The Personal Finance Portal application provides the following features:
 - Users can create and manage multiple savings accounts, deposits, withdrawals, and savings goals.
+- Users can create and manage their balances, incomes, and expenses
 - Users can view their savings account balance and progress towards their savings goals.
 - Users can view a summary of their monthly expenses and savings.
 - Users can generate a pie chart to visualize their expenses.
