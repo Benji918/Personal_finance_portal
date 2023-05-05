@@ -165,6 +165,7 @@ class SavingsAccountSummaryTiles(TemplateView):
         ).values('created_at').annotate(
             total_amount=Sum('amount')
         ).order_by('created_at') or 0
+        print(deposits)
         withdrawals = Withdrawal.objects.filter(savings=savings_object).prefetch_related('savings').annotate(
             timestamp=Trunc('created_at', 'month')
         ).values('created_at').annotate(
@@ -176,10 +177,10 @@ class SavingsAccountSummaryTiles(TemplateView):
         deposit_data = []
         withdrawal_data = []
         for deposit in deposits:
-            labels.append(deposit['created_at'].strftime('%B %d, %Y'))
+            labels.append(deposit['created_at'].strftime('%d %B'))
             deposit_data.append(float(deposit['total_amount']))
         for withdrawal in withdrawals:
-            labels.append(withdrawal['created_at'].strftime('%B %d, %Y'))
+            labels.append(withdrawal['created_at'].strftime('%d %B'))
             withdrawal_data.append(float(withdrawal['total_amount']))
 
         context['labels'] = json.dumps(labels)
