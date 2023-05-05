@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'captcha',
     'cloudinary_storage',
     'cloudinary',
+    'debug_toolbar',
 ]
 
 JAZZMIN_SETTINGS = {
@@ -172,7 +173,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
+
+INTERNAL_IPS = ['127.0.0.1']
 
 CSRF_TRUSTED_ORIGINS = ['https://personalfinaceportal-production.up.railway.app']
 

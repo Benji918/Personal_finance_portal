@@ -327,38 +327,38 @@ var myLineChart = new Chart(ctx, {
 
 });
 
-<!--// Pie Chart Example-->
-<!--var ctx = document.getElementById("myPieChart");-->
-<!--var myPieChart = new Chart(ctx, {-->
-<!--  type: 'pie',-->
-<!--  data: {-->
-<!--    labels: {{labels_2|safe}},-->
-<!--    datasets: [{-->
-<!--      label: "Category spending",-->
-<!--      data: {{data_2|safe}},-->
-<!--      backgroundColor: ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf'],-->
-<!--      hoverBackgroundColor: ['#5193d8', '#ffad5c', '#55c16e', '#e65454', '#b48fd6', '#aa7c64', '#eeace7', '#a1a1a1', '#d3d35a', '#56c6e8'],-->
-<!--      hoverBorderColor: "rgba(234, 236, 244, 1)",-->
-<!--    }],-->
-<!--  },-->
-<!--  options: {-->
-<!--    maintainAspectRatio: false,-->
-<!--    tooltips: {-->
-<!--      backgroundColor: "rgb(255,255,255)",-->
-<!--      bodyFontColor: "#858796",-->
-<!--      borderColor: '#dddfeb',-->
-<!--      borderWidth: 1,-->
-<!--      xPadding: 15,-->
-<!--      yPadding: 15,-->
-<!--      displayColors: false,-->
-<!--      caretPadding: 10,-->
-<!--    },-->
-<!--    legend: {-->
-<!--      display: false-->
-<!--    },-->
-<!--    cutoutPercentage: 80,-->
-<!--  },-->
-<!--});-->
+// Pie Chart Example
+var ctx = document.getElementById("myPieChart");
+var myPieChart = new Chart(ctx, {
+  type: 'pie',
+  data: {
+    labels: {{num_labels|safe}},
+    datasets: [{
+      label: "Category count",
+      data: {{num_data|safe}},
+      backgroundColor: ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf'],
+      hoverBackgroundColor: ['#5193d8', '#ffad5c', '#55c16e', '#e65454', '#b48fd6', '#aa7c64', '#eeace7', '#a1a1a1', '#d3d35a', '#56c6e8'],
+      hoverBorderColor: "rgba(234, 236, 244, 1)",
+    }],
+  },
+  options: {
+    maintainAspectRatio: false,
+    tooltips: {
+      backgroundColor: "rgb(255,255,255)",
+      bodyFontColor: "#858796",
+      borderColor: '#dddfeb',
+      borderWidth: 1,
+      xPadding: 15,
+      yPadding: 15,
+      displayColors: false,
+      caretPadding: 10,
+    },
+    legend: {
+      display: false
+    },
+    cutoutPercentage: 80,
+  },
+});
 
 <!--// Bar Chart Example-->
 <!--var ctx = document.getElementById("myBarChart");-->

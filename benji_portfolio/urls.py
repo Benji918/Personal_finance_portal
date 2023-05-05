@@ -26,3 +26,8 @@ urlpatterns = [
     path('budget_section/', include('budget_section.urls')),
     path('savings_section/', include('savings_section.urls')),
 ]
+
+if settings.DEBUG:
+    import debug_toolbar
+
+    urlpatterns += [path('__debug__/', include(debug_toolbar.urls)), ]
