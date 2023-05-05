@@ -112,6 +112,7 @@ The Personal Finance Portal application provides the following features:
 The Personal Finance Portal application uses the following technologies:
 - Django: a Python web framework for building web applications
 - PostgresSQL: an open-source relational database management system
+- JavaScript: for visualizations and interactivity on the dashboard
 - Chart.js: a JavaScript library for visualizing data in charts
 - Bootstrap: a popular CSS framework for building responsive websites
 
