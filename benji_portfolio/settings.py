@@ -148,21 +148,7 @@ ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 
 PHONENUMBER_DEFAULT_REGION = "NG"
 
-
 DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5 MB
-
-TWILIO_ACCOUNT_SID = env('TWILIO_ACCOUNT_SID')
-TWILIO_AUTH_TOKEN = env('TWILIO_AUTH_TOKEN')
-TWILIO_FROM_NUMBER = env('TWILIO_FROM_NUMBER')
-
-
-# Twilio SMS backend for sending verification codes
-SMS_BACKEND = 'django_twilio.sms.TwilioBackend'
-SMS_BACKEND_KWARGS = {
-    'account_sid': TWILIO_ACCOUNT_SID,
-    'auth_token': TWILIO_AUTH_TOKEN,
-    'from_number': TWILIO_FROM_NUMBER,
-}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -205,8 +191,6 @@ STORAGES = {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
-
-
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 
@@ -289,7 +273,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
-EMAIL_PORT = 465
+EMAIL_PORT = 587
 EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 

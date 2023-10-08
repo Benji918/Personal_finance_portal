@@ -12,6 +12,7 @@ This is a personal finance application built using the Django web framework. It 
 
 ## Project ER Diagram
 ![model diagram](https://github.com/Benji918/Personal_finance_portal/blob/main/Django%20app.png)
+![project diagram](https://github.com/Benji918/Personal_finance_portal/blob/main/img%20app.png)
 
 ## Prerequisites
 

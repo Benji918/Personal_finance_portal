@@ -35,10 +35,10 @@ def register(request):
         if form.is_valid():
             # save form in the memory not in database
             user = form.save(commit=False)
-            user.is_active = False
+            user.is_active = True
             user.save()
             # Send activation email
-            send_activation_email(request, user)
+            # send_activation_email(request, user)
             return redirect('accounts:login')
     context = {'form': form}
     return render(request, 'accounts/register.html', context)
