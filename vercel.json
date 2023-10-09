@@ -1,0 +1,14 @@
+{
+    "builds": [
+      {
+        "src": "benji_portfolio/wsgi.py",
+        "use": "@vercel/python"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/(.*)",
+        "dest": "benji_portfolio/wsgi.py"
+      }
+    ]
+}
