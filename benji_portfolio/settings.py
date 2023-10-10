@@ -220,11 +220,11 @@ WSGI_APPLICATION = 'benji_portfolio.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': env('POSTGRES_NAME'),
-        'HOST': env('POSTGRES_HOST'),
-        'PASSWORD': env('POSTGRES_PASSWORD'),
-        'PORT': env('POSTGRES_PORT'),
-        'USER': env('POSTGRES_USER'),
+        'NAME': os.environ.get('POSTGRES_NAME'),
+        'HOST': os.environ.get('POSTGRES_HOST'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+        'PORT': os.environ.get('POSTGRES_PORT'),
+        'USER': os.environ.get('POSTGRES_USER'),
 
     }
 }
