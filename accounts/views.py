@@ -1,4 +1,4 @@
-from babel.compat import force_text
+
 from django import forms
 from django.conf import settings
 from django.contrib import messages
@@ -255,7 +255,7 @@ def passwordResetConfirm(request, uidb64, token):
 def activate(request, uidb64, token):
     User = get_user_model()
     try:
-        uid = force_text(urlsafe_base64_decode(uidb64))
+        uid = force_str(urlsafe_base64_decode(uidb64))
         user = CustomUser.objects.get(pk=uid)
     except (TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
