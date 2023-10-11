@@ -162,9 +162,7 @@ MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
-INTERNAL_IPS = ['127.0.0.1', 'https://personalfinaceportal-production.up.railway.app']
 
-CSRF_TRUSTED_ORIGINS = ['https://personalfinaceportal-production.up.railway.app']
 
 ROOT_URLCONF = 'benji_portfolio.urls'
 
@@ -220,11 +218,11 @@ WSGI_APPLICATION = 'benji_portfolio.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('POSTGRES_NAME'),
-        'HOST': os.environ.get('POSTGRES_HOST'),
-        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
-        'PORT': os.environ.get('POSTGRES_PORT'),
-        'USER': os.environ.get('POSTGRES_USER'),
+        'NAME': 'postgres',
+        'HOST': 'db.aueqtxaqpcfnokkjwdyt.supabase.co',
+        'PASSWORD': 'bCnxL3WUM5sVAK4h',
+        'PORT': '5432',
+        'USER': 'postgres',
 
     }
 }
